@@ -7,7 +7,7 @@ const getRandomNumber = function (min, max) {
 
 getRandomNumber(0, 15);
 
-const entryComment = input.value;
+const entryComment = 'Строка ввода комментария'; //input.value;
 const getLengthLine = function (line, maxLine) {
   if (line.length <= maxLine) {
     return true;
