@@ -65,16 +65,14 @@ const NAMES = [
 
 const entryComment = 'Строка ввода комментария'; //input.value;
 
-const getRandomNumber = function (min, max) {
+const getRandomNumber = (min, max) => {
   if (0 <= min < max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
   return 'Ошибка при введении чисел';
 };
 
-//getRandomNumber(0, 15);
-
-const getLengthLine = function (line, maxLine) {
+const getLengthLine = (line, maxLine) => {
   if (line.length <= maxLine) {
     return true;
   }
@@ -83,29 +81,31 @@ const getLengthLine = function (line, maxLine) {
 
 getLengthLine(entryComment, 140);
 
-const createComment = function () { // нужно ли в функцию добавлять параметр, т.к. при вызове этой функции есть аргумент?
+let commentId = 1;
+
+const createComment = () => {
   const comment = {
-    id: getRandomNumber(200, 700),
-    avatar: `../img/avatar-${getRandomNumber(1, 6)}.svg`, // Долго искала, думала - нашла способ склеивания обратными кавычками `` в демке академии
+    id: commentId++,
+    avatar: `../img/avatar-${getRandomNumber(1, 6)}.svg`,
     messagge: MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
     name: NAMES[getRandomNumber(0, NAMES.length - 1)],
   };
   return comment;
 };
 
-const createArrayComments = function () {
+const createArrayComments = () => {
   const comments = [];
-  for (let i = 0; i < getRandomNumber(0, 3); i++) {
-    const newComment = createComment(i);
+  for (let i = 0; i <= 3; i++) {
+    const newComment = createComment();
     comments.push(newComment);
   }
   return comments;
 };
 
-const createDescriptionPhoto = function (index) {
+const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
-    id: index, // 1-25 штук фото
-    url: `photos/${index}}.jpg`,
+    id: index,
+    url: `photos/${index}.jpg`,
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),
     comments: createArrayComments(),
@@ -113,9 +113,9 @@ const createDescriptionPhoto = function (index) {
   return descriptionPhoto;
 };
 
-const createArrayPhotos = function () {
+const createArrayPhotos = () => {
   const photos = [];
-  for (let index = 0; index < 25; index++) { // а здесь цикл должен начинаться с 0 или с 1 ??? Ведь нет нулевой фото, есть первая.
+  for (let index = 1; index <= 25; index++) {
     const newPhoto = createDescriptionPhoto(index);
     photos.push(newPhoto);
   }
