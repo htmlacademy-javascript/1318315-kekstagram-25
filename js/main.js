@@ -65,6 +65,8 @@ const NAMES = [
 
 const entryComment = 'Строка ввода комментария'; //input.value;
 
+let commentId = 1;
+
 const getRandomNumber = (min, max) => {
   if (0 <= min < max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
@@ -72,16 +74,9 @@ const getRandomNumber = (min, max) => {
   return 'Ошибка при введении чисел';
 };
 
-const getLengthLine = (line, maxLine) => {
-  if (line.length <= maxLine) {
-    return true;
-  }
-  return false;
-};
+const getLengthLine = (line, maxLine) => line.length <= maxLine;
 
 getLengthLine(entryComment, 140);
-
-let commentId = 1;
 
 const createComment = () => {
   const comment = {
@@ -105,7 +100,7 @@ const createArrayComments = () => {
 const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
     id: index,
-    url: `photos/${index}.jpg`,
+    url: `photos/${index}.jpg`, // `../photos/${index}.jpg`
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),
     comments: createArrayComments(),
