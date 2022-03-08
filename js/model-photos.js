@@ -1,4 +1,4 @@
-import {getRandomNumber} from './universal.js';
+import {getRandomNumber} from './utils.js';
 
 const DESCRIPTIONS = [
   'Кто-то сделал эти 1200 тонные блоки? Это не цемент. Сейчас даже кранов таких нет, чтоб их поднять, не говоря уже о том, чтобы сделать.',
