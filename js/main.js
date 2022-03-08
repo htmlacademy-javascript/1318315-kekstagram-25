@@ -1,3 +1,3 @@
 import './comments.js';
 import './model-photos.js';
-import './universal.js';
+import './utils.js';
