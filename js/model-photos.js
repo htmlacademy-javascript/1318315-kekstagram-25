@@ -89,7 +89,7 @@ const createArrayComments = () => {
 const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
     id: index,
-    url: `photos/${index}.jpg`, // `../photos/${index}.jpg`
+    url: `../photos/${index}.jpg`, // `../photos/${index}.jpg`
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),
     comments: createArrayComments(),
@@ -107,3 +107,5 @@ const createArrayPhotos = () => {
 };
 
 createArrayPhotos();
+
+export {createArrayPhotos};

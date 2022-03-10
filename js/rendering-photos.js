@@ -1,25 +1,34 @@
+import {createArrayPhotos} from "./model-photos.js";
+
+const data = createArrayPhotos();
+
 const templateFragment = document.querySelector('#picture').content;
 const templatePicture = templateFragment.querySelector('.picture');
 const pictures = document.querySelector('.pictures');
-console.log(pictures);
+//console.log(pictures);
 
 // Создание одного фото
-const createPhoto = (xxx) => { // xxx - данные из model-photos.js
+const createPhoto = (photo) => {
+  //console.log(photo);
   const img = templatePicture.cloneNode(true);
-  img.querySelector('.picture__img').src = xxx.url // xxx - данные из model-photos.js
-  img.querySelector('.picture__comments').value = xxx.url // xxx - данные из model-photos.js
-  img.querySelector('.picture__likes').value = xxx.url // xxx - данные из model-photos.js
+  img.querySelector('.picture__img').src = photo.url;
+  img.querySelector('.picture__comments').textContent = photo.comments;
+  img.querySelector('.picture__likes').textContent = photo.likes;
   return img;
 };
 
 // Создание массива фотографий
-const createArrayPhotos = (yyy) => { // yyy - данные из функции createArrayPhotos из model-photos.js
+const drawArrayPhotos = (photos) => {
   const fragment = document.createDocumentFragment();
-  for(let i = 1; i <= yyy.length; i++) {
-    const newPhoto = createPhoto(i);
+  for(let i = 0; i <= photos.length; i++) {
+    const newPhoto = createPhoto(photos[i]);
     fragment.appendChild(newPhoto);
   }
   pictures.appendChild(fragment);
 };
 
-createArrayPhotos();
+//console.log(pictures);
+
+drawArrayPhotos(data);
+
+//console.log(drawArrayPhotos(data));
