@@ -1,4 +1,4 @@
-import {createArrayPhotos} from "./model-photos.js";
+import {createArrayPhotos} from './model-photos.js';
 
 const data = createArrayPhotos();
 
