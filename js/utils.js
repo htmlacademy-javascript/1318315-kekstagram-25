@@ -5,4 +5,6 @@ const getRandomNumber = (min, max) => {
   return 'Ошибка при введении чисел';
 };
 
-export {getRandomNumber};
+const isEscKeydown = (evt) => evt.key === 'Escape';
+
+export {getRandomNumber, isEscKeydown};

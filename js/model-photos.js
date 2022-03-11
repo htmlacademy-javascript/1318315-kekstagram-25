@@ -108,4 +108,4 @@ const createArrayPhotos = () => {
 
 createArrayPhotos();
 
-export {createArrayPhotos};
+export {createArrayPhotos, createArrayComments};

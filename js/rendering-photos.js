@@ -26,3 +26,5 @@ const drawArrayPhotos = (photos) => {
 };
 
 drawArrayPhotos(data);
+
+export {drawArrayPhotos};
