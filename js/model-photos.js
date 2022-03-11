@@ -70,7 +70,7 @@ let commentId = 1;
 const createComment = () => {
   const comment = {
     id: commentId++,
-    avatar: `../img/avatar-${getRandomNumber(1, 6)}.svg`,
+    avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
     messagge: MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
     name: NAMES[getRandomNumber(0, NAMES.length - 1)],
   };
@@ -89,7 +89,7 @@ const createArrayComments = () => {
 const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
     id: index,
-    url: `photos/${index}.jpg`, // `../photos/${index}.jpg`
+    url: `photos/${index}.jpg`,
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),
     comments: createArrayComments(),
@@ -107,3 +107,5 @@ const createArrayPhotos = () => {
 };
 
 createArrayPhotos();
+
+export {createArrayPhotos};
