@@ -70,7 +70,7 @@ let commentId = 1;
 const createComment = () => {
   const comment = {
     id: commentId++,
-    avatar: `../img/avatar-${getRandomNumber(1, 6)}.svg`,
+    avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
     messagge: MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
     name: NAMES[getRandomNumber(0, NAMES.length - 1)],
   };
