@@ -1,6 +1,23 @@
-import {drawArrayPhotos} from './rendering-photos.js';
+//import {drawArrayPhotos} from './rendering-photos.js';
 import {drawFullScreenPhoto} from './full-photo.js';
+//import {createArrayPhotos} from './model-photos.js';
+const photos = document.querySelector('.pictures');
+const photo = photos.children;
+//const data = createArrayPhotos();
+//const photos = drawArrayPhotos(data);
+console.log(photo);
 
-const photos = drawArrayPhotos();
+// for (let i = 0; i < data.length; i++) {
+//   console.log(data[i]);
+//   data[i].addEventListener('click', function() {
+//     return drawFullScreenPhoto(data[i])});
+// };
 
-photos.addEventListener('click', drawFullScreenPhoto());
+// photo.addEventListener('click', function(evt) {
+//   console.log('Клик произошел');
+//   return evt.target = drawFullScreenPhoto(photo);
+// });
+
+photos.forEach((photo) => {
+  getFullPhoto(photo);
+});

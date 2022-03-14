@@ -3,7 +3,7 @@ import {createArrayPhotos} from './model-photos.js';
 import {isEscKeydown} from './utils.js';
 
 const dataComments = createArrayComments();
-const dataPotos = createArrayPhotos();
+const dataPhotos = createArrayPhotos();
 
 const fullScreenPhoto = document.querySelector('.big-picture');
 const body = document.querySelector('body');
@@ -16,17 +16,19 @@ const insertComments = (comment) => {
   const newComment = document.createElement('li');
   newComment.classList.add('social__comment');
 
-  const img = newComment.createElement('img');
+  const img = document.createElement('img');
   img.classList.add('social__picture');
 
   img.src = comment.avatar;
   img.alt = comment.name;
   img.width = 35;
   img.height = 35;
+  newComment.appendChild(img);
 
-  const text = newComment.createElement('p');
+  const text = document.createElement('p');
   text.classList.add('social__text');
   text.textContent = comment.messagge;
+  newComment.appendChild(text);
 
   comments.appendChild(newComment);
 
@@ -49,11 +51,9 @@ const drawFullScreenPhoto = (photo) => {
   body.classList.add('modal-open');
 };
 
-drawFullScreenPhoto(dataPotos);
-
 // Закрытие полноэкранного фото
-const onFullScreen = (evt) => {
-  evt.preventDefault();
+const onFullScreen = () => {
+  //evt.preventDefault();
   body.classList.remove('modal-open');
 };
 

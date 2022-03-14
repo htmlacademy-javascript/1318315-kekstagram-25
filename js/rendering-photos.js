@@ -18,7 +18,7 @@ const createPhoto = (photo) => {
 // Создание массива фотографий
 const drawArrayPhotos = (photos) => {
   const fragment = document.createDocumentFragment();
-  for(let i = 0; i < photos.length; i++) {
+  for(let i = 0; i < photos.length - 1; i++) {
     const newPhoto = createPhoto(photos[i]);
     fragment.appendChild(newPhoto);
   }
