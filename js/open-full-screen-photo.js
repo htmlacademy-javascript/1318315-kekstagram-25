@@ -2,10 +2,9 @@
 import {drawFullScreenPhoto} from './full-photo.js';
 //import {createArrayPhotos} from './model-photos.js';
 const photos = document.querySelector('.pictures');
-const photo = photos.children;
+//const photo = photos.children;
 //const data = createArrayPhotos();
 //const photos = drawArrayPhotos(data);
-console.log(photo);
 
 // for (let i = 0; i < data.length; i++) {
 //   console.log(data[i]);
@@ -19,5 +18,5 @@ console.log(photo);
 // });
 
 photos.forEach((photo) => {
-  getFullPhoto(photo);
+  drawFullScreenPhoto(photo);
 });

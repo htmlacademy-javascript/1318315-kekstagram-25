@@ -1,9 +1,9 @@
 import {createArrayComments} from './model-photos.js';
-import {createArrayPhotos} from './model-photos.js';
+//import {createArrayPhotos} from './model-photos.js';
 import {isEscKeydown} from './utils.js';
 
 const dataComments = createArrayComments();
-const dataPhotos = createArrayPhotos();
+//const dataPhotos = createArrayPhotos();
 
 const fullScreenPhoto = document.querySelector('.big-picture');
 const body = document.querySelector('body');
@@ -50,6 +50,8 @@ const drawFullScreenPhoto = (photo) => {
 
   body.classList.add('modal-open');
 };
+
+// drawFullScreenPhoto(dataPhotos);
 
 // Закрытие полноэкранного фото
 const onFullScreen = () => {
