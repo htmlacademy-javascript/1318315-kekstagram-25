@@ -79,7 +79,7 @@ const createComment = () => {
 
 const createArrayComments = () => {
   const comments = [];
-  for (let i = 0; i <= 3; i++) {
+  for (let i = 0; i <= 4; i++) {
     const newComment = createComment();
     comments.push(newComment);
   }
@@ -106,6 +106,6 @@ const createArrayPhotos = () => {
   return photos;
 };
 
-createArrayPhotos();
+//createArrayPhotos();
 
 export {createArrayPhotos, createArrayComments};

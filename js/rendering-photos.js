@@ -16,15 +16,14 @@ const createPhoto = (photo) => {
 };
 
 // Создание массива фотографий
-const drawArrayPhotos = (photos) => {
-  const fragment = document.createDocumentFragment();
-  for(let i = 0; i < photos.length - 1; i++) {
-    const newPhoto = createPhoto(photos[i]);
+const drawArrayPhotos = (objects) => {
+  for(let i = 0; i < objects.length; i++) {
+    const fragment = document.createDocumentFragment();
+    const newPhoto = createPhoto(objects[i]);
     fragment.appendChild(newPhoto);
+    pictures.appendChild(fragment);
   }
-  pictures.appendChild(fragment);
+  return pictures; // может быть стоит убрать эту строку?
 };
 
-drawArrayPhotos(data);
-
-export {drawArrayPhotos};
+export {data, drawArrayPhotos};
