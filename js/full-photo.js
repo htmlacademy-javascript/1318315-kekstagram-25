@@ -1,13 +1,10 @@
 import {createArrayComments} from './model-photos.js';
-//import {createArrayPhotos} from './model-photos.js';   // <--- удалить
-import {isEscKeydown} from './utils.js';
 
 const dataComments = createArrayComments();
-//const dataPhotos = createArrayPhotos();   // <--- удалить
 
 const fullScreenPhoto = document.querySelector('.big-picture');
 const body = document.querySelector('body');
-const close = fullScreenPhoto.querySelector('.big-picture__cancel');
+
 const IMG_WIDTH = 35;
 const IMG_HEIGHT = 35;
 
@@ -45,30 +42,17 @@ const insertComments = (comments) => {
 
 // Функция-шаблон отрисовки полноэкранного фото
 const drawFullScreenPhoto = (photo) => {
-  fullScreenPhoto.querySelector('.big-picture__img').src = photo.url;
-  fullScreenPhoto.querySelector('.likes-count').textContent = photo.likes;
-  fullScreenPhoto.querySelector('.comments-count').textContent = `photo.${insertComments(dataComments)}.length`;
-  fullScreenPhoto.querySelector('.social__comments').textContent = insertComments(dataComments);
-  fullScreenPhoto.querySelector('.social__caption').textContent = photo.description;
-
   fullScreenPhoto.querySelector('.social__comment-count').classList.add('hidden');
   fullScreenPhoto.querySelector('.comments-loader').classList.add('hidden');
   fullScreenPhoto.classList.remove('hidden');
   body.classList.add('modal-open');
+  return function () {  //  callback
+    fullScreenPhoto.querySelector('.big-picture__img').src = photo.url;
+    fullScreenPhoto.querySelector('.likes-count').textContent = photo.likes;
+    fullScreenPhoto.querySelector('.comments-count').textContent = `photo.${insertComments(dataComments)}.length`;
+    fullScreenPhoto.querySelector('.social__comments').textContent = insertComments(dataComments);
+    fullScreenPhoto.querySelector('.social__caption').textContent = photo.description;
+  };
 };
 
-//drawFullScreenPhoto(dataPhotos);   // <--- удалить
-
-// Закрытие полноэкранного фото
-const onFullScreen = () => {
-  //evt.preventDefault();
-  body.classList.remove('modal-open');
-};
-
-close.addEventListener('click', onFullScreen());
-close.removeEventListener('click', onFullScreen());
-
-document.addEventListener(isEscKeydown, onFullScreen());
-document.removeEventListener(isEscKeydown, onFullScreen());
-
-export {drawFullScreenPhoto};
+export {drawFullScreenPhoto, fullScreenPhoto, body};

@@ -88,7 +88,7 @@ const createArrayComments = () => {
 
 const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
-    id: index,
+    id: index, // id:`id`+index, // лучше id = буквы + цифры ???
     url: `photos/${index}.jpg`,
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),
@@ -105,7 +105,5 @@ const createArrayPhotos = () => {
   }
   return photos;
 };
-
-//createArrayPhotos();
 
 export {createArrayPhotos, createArrayComments};

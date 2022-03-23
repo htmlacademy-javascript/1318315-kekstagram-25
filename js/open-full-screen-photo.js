@@ -1,14 +1,39 @@
 import {data, drawArrayPhotos} from './rendering-photos.js';
-import {drawFullScreenPhoto} from './full-photo.js';
-//console.log(data);   // определяется
+import {drawFullScreenPhoto, fullScreenPhoto, body} from './full-photo.js';
+import {isEscKeydown} from './utils.js';
+
 const sectionPictures = drawArrayPhotos(data);
-//console.log(sectionPictures);   // определяется
 const photos = Array.from(sectionPictures.querySelectorAll('.picture'));
-//console.log(photos);   // определяется
+const close = fullScreenPhoto.querySelector('.big-picture__cancel');
+
 photos.forEach((photo) => {
   photo.addEventListener('click', function (evt) {
-    // console.log(evt.currentTarget);   // определяется
-    // console.log(data[evt.currentTarget.dataset.id]);  // не определяется!!!
-    drawFullScreenPhoto(data[evt.currentTarget.dataset.id]);
+    drawFullScreenPhoto(data[evt.currentTarget.id]);
   });
 });
+
+// Закрытие полноэкранного фото
+const closePhoto = () => {
+  fullScreenPhoto.querySelector('.social__comment-count').classList.remove('hidden');
+  fullScreenPhoto.querySelector('.comments-loader').classList.remove('hidden');
+  fullScreenPhoto.classList.add('hidden');
+  body.classList.remove('modal-open');
+};
+
+const toCloseFullScreen = () => function (evt) {
+  evt.preventDefault();
+  closePhoto();
+};
+
+const toEscFullScreen = () => function (evt) {
+  if (isEscKeydown(evt)) {
+    evt.preventDefault();
+    closePhoto();
+  }
+};
+
+close.addEventListener('click', toCloseFullScreen());
+close.removeEventListener('click', toCloseFullScreen());
+
+document.addEventListener('keydown', toEscFullScreen());
+document.removeEventListener('keydown', toEscFullScreen());
