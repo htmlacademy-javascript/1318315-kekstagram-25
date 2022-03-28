@@ -3,6 +3,7 @@ import {createArrayComments} from './model-photos.js';
 const dataComments = createArrayComments();
 
 const fullScreenPhoto = document.querySelector('.big-picture');
+const commentsCurrentPhoto = fullScreenPhoto.querySelector('.big-picture__social');
 const body = document.querySelector('body');
 
 const IMG_WIDTH = 35;
@@ -40,19 +41,25 @@ const insertComments = (comments) => {
   return commentsArray;
 };
 
+const commentsPhoto = insertComments(dataComments);
+
 // Функция-шаблон отрисовки полноэкранного фото
 const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.social__comment-count').classList.add('hidden');
   fullScreenPhoto.querySelector('.comments-loader').classList.add('hidden');
   fullScreenPhoto.classList.remove('hidden');
   body.classList.add('modal-open');
-  return function () {  //  callback
-    fullScreenPhoto.querySelector('.big-picture__img').src = photo.url;
-    fullScreenPhoto.querySelector('.likes-count').textContent = photo.likes;
-    fullScreenPhoto.querySelector('.comments-count').textContent = `photo.${insertComments(dataComments)}.length`;
-    fullScreenPhoto.querySelector('.social__comments').textContent = insertComments(dataComments);
-    fullScreenPhoto.querySelector('.social__caption').textContent = photo.description;
-  };
+
+  fullScreenPhoto.querySelector('.big-picture__img img').src = photo.url;
+  fullScreenPhoto.querySelector('.likes-count').textContent = '';
+  fullScreenPhoto.querySelector('.likes-count').append(photo.likes);
+  fullScreenPhoto.querySelector('.comments-count').append(`photo.${commentsPhoto}.length`);
+  fullScreenPhoto.querySelector('.social__caption').append(photo.description);
+  fullScreenPhoto.querySelector('.social__comments').append('');
+
+  fullScreenPhoto.querySelector('.social__comments').append(commentsPhoto); // появляется ошибка - Uncaught DOMException: Element.append: The new child is an ancestor of the parent
+
+  //fullScreenPhoto.querySelector('.big-picture__social').append(commentsPhoto); // блок для написания своего комментария (social__footer) становится выше списка комментариев (social__comment)
 };
 
 export {drawFullScreenPhoto, fullScreenPhoto, body};

@@ -7,7 +7,7 @@ const photos = Array.from(sectionPictures.querySelectorAll('.picture'));
 const close = fullScreenPhoto.querySelector('.big-picture__cancel');
 
 photos.forEach((photo) => {
-  photo.addEventListener('click', function (evt) {
+  photo.addEventListener('click', (evt) => {
     drawFullScreenPhoto(data[evt.currentTarget.id]);
   });
 });

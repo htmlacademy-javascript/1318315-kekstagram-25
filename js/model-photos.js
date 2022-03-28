@@ -66,6 +66,8 @@ const NAMES = [
 ];
 
 let commentId = 1;
+let photoId = 1;
+//let idPhoto = photoId++;
 
 const createComment = () => {
   const comment = {
@@ -88,7 +90,7 @@ const createArrayComments = () => {
 
 const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
-    id: index, // id:`id`+index, // лучше id = буквы + цифры ???
+    id: photoId++,
     url: `photos/${index}.jpg`,
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),

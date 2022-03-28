@@ -12,7 +12,6 @@ const createPhoto = (photo) => {
   templatePicture.id = photoId++; // прописала id для picture
   const img = templatePicture.cloneNode(true);
   img.querySelector('.picture__img').src = photo.url;
-  //img.querySelector('.picture__img').id = photo.id; // нужно ли здесь(picture__img) id внутри picture ??? если да, то в 200 строку picture__img добавить id=""
   img.querySelector('.picture__img').alt = photo.description;
   img.querySelector('.picture__comments').textContent = photo.comments.length;
   img.querySelector('.picture__likes').textContent = photo.likes;
@@ -27,7 +26,7 @@ const drawArrayPhotos = (objects) => {
     fragment.appendChild(newPhoto);
     pictures.appendChild(fragment);
   }
-  return pictures; // может быть стоит убрать эту строку?
+  return pictures;
 };
 
 export {data, drawArrayPhotos};
