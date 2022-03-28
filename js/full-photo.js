@@ -3,7 +3,6 @@ import {createArrayComments} from './model-photos.js';
 const dataComments = createArrayComments();
 
 const fullScreenPhoto = document.querySelector('.big-picture');
-const commentsCurrentPhoto = fullScreenPhoto.querySelector('.big-picture__social');
 const body = document.querySelector('body');
 
 const IMG_WIDTH = 35;
