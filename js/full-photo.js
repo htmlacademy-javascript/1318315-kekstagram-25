@@ -8,6 +8,23 @@ const body = document.querySelector('body');
 const IMG_WIDTH = 35;
 const IMG_HEIGHT = 35;
 
+// Обнуляю комментарии записанные ранее
+const deleteComments = () => {
+  const comments = fullScreenPhoto.querySelector('.social__comments');
+  const items = comments.children;
+  //console.log(items);
+  if (items.length > 0) {
+    for (let i = items.length; i > 0; i--) {
+      //console.log(number);
+      //console.log(items[0]);
+      items[0].remove();
+      //console.log(items);
+    }
+  }
+  //console.log(items);
+  return items;
+};
+
 // Подстановка одного комментария
 const insertComment = (object) => {
   const newComment = document.createElement('li');
@@ -41,6 +58,9 @@ const insertComments = (comments) => {
 };
 
 const commentsPhoto = insertComments(dataComments);
+// console.log(commentsPhoto.children);
+const commentsPhotoToObject = Array.from(commentsPhoto);
+// console.log(commentsPhotoToObject);
 
 // Функция-шаблон отрисовки полноэкранного фото
 const drawFullScreenPhoto = (photo) => {
@@ -52,13 +72,22 @@ const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.big-picture__img img').src = photo.url;
   fullScreenPhoto.querySelector('.likes-count').textContent = '';
   fullScreenPhoto.querySelector('.likes-count').append(photo.likes);
-  fullScreenPhoto.querySelector('.comments-count').append(`photo.${commentsPhoto}.length`);
+
+  //console.log(fullScreenPhoto.querySelector('.comments-count').append(photo.comments.length));
+  fullScreenPhoto.querySelector('.comments-count').append(photo.comments.length);  //  Не подставляется количество комментариев
+  fullScreenPhoto.querySelector('.comments-count').append(`photo.${commentsPhoto}.length`);  //  Не подставляется количество комментариев
+  fullScreenPhoto.querySelector('.comments-count').append(`photo.${commentsPhotoToObject}.length`);  //  Не подставляется количество комментариев
+
   fullScreenPhoto.querySelector('.social__caption').append(photo.description);
-  fullScreenPhoto.querySelector('.social__comments').append('');
 
-  fullScreenPhoto.querySelector('.social__comments').append(commentsPhoto); // появляется ошибка - Uncaught DOMException: Element.append: The new child is an ancestor of the parent
-
-  //fullScreenPhoto.querySelector('.big-picture__social').append(commentsPhoto); // блок для написания своего комментария (social__footer) становится выше списка комментариев (social__comment)
+  deleteComments();
+  // console.log(fullScreenPhoto.querySelector('.social__comments').replaceWith(photo.comments));
+  // console.log(fullScreenPhoto.querySelector('.social__comments').replaceWith(commentsPhoto));
+  // console.log(fullScreenPhoto.querySelector('.social__comments').replaceWith(`photo.${commentsPhotoToObject}`));
+  fullScreenPhoto.querySelector('.social__comments').replaceWith(`photo.${commentsPhotoToObject}`); //  Не подставляется массив комментариев
+  fullScreenPhoto.querySelector('.social__comments').replaceWith(`photo.${commentsPhoto}`); //  Не подставляется массив комментариев
+  fullScreenPhoto.querySelector('.social__comments').replaceWith(commentsPhoto);  //  Не подставляется массив комментариев
+  fullScreenPhoto.querySelector('.social__comments').replaceWith(photo.comments); //  Не подставляется массив комментариев
 };
 
 export {drawFullScreenPhoto, fullScreenPhoto, body};
