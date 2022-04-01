@@ -66,6 +66,8 @@ const NAMES = [
 ];
 
 let commentId = 1;
+let photoId = 1;
+//let idPhoto = photoId++;
 
 const createComment = () => {
   const comment = {
@@ -79,7 +81,7 @@ const createComment = () => {
 
 const createArrayComments = () => {
   const comments = [];
-  for (let i = 0; i <= 3; i++) {
+  for (let i = 0; i <= 4; i++) {
     const newComment = createComment();
     comments.push(newComment);
   }
@@ -88,7 +90,7 @@ const createArrayComments = () => {
 
 const createDescriptionPhoto = (index) => {
   const descriptionPhoto = {
-    id: index,
+    id: photoId++,
     url: `photos/${index}.jpg`,
     description: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)],
     likes: getRandomNumber(15, 200),
@@ -106,6 +108,4 @@ const createArrayPhotos = () => {
   return photos;
 };
 
-createArrayPhotos();
-
-export {createArrayPhotos};
+export {createArrayPhotos, createArrayComments};
