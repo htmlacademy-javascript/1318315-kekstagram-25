@@ -2,7 +2,7 @@ import {isEscKeydown} from './utils.js';
 
 const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
-const open = form.querySelector('#upload-file');
+const openFile = form.querySelector('#upload-file');
 const imageUpload = form.querySelector('.img-upload__overlay');
 const close = form.querySelector('#upload-cancel');
 const hashtagsField = form.querySelector('.text__hashtags');
@@ -15,8 +15,8 @@ const openFormUpload = () => {
   body.classList.add('modal-open');
 };
 
-open.addEventListener('click', () => {openFormUpload()});
-open.removeEventListener('click', () => {openFormUpload()});
+openFile.addEventListener('change', () => {openFormUpload()});
+openFile.removeEventListener('change', () => {openFormUpload()});
 
 // Закрытие формы по подстановке своего фото
 const closeFormUpload = () => {
@@ -41,15 +41,13 @@ document.addEventListener('keydown', toEscFormClose());
 document.removeEventListener('keydown', toEscFormClose());
 
 document.addEventListener('keydown', (evt) => {
-  if (form.querySelector('.img-upload fieldset:focus')) {
-    if (isEscKeydown) {
-      evt.stopPropagation();
-    }
+  if (form.querySelector('.text__hashtags input:focus') && isEscKeydown) {
+    evt.stopPropagation();
   }
 });
 
 // Валидация
-const heshtegSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;
+const heshtegSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;// i -хештеги нечувствительны к регистру, m - поиск по всей строке.
 
 window.onload = function () {
   const pristine = new Pristine(form);
@@ -61,43 +59,38 @@ window.onload = function () {
 
   const validateHeshtegsField = (value) => {
     const heshtegArray = value.split(/\s/, 5); // разбивает строку на массив, показывает 5шт
+    //
     // for (let i = 0; i < heshtegArray.length; i++) {
     //   if (!heshtegSymbol.test(heshtegArray[i])) {
-    //     console.log(heshtegSymbol.test(heshtegArray[i]));
-    //     console.log('error');
+    //     return console.log('error - heshteg napisan ne pravilno'); // Нужно передать Пристине сообщение об ошибке!!!
     //   } else {
-    //     console.log('ok');
+    //     return console.log('ok - heshteg napisan pravilno'); // Нужно выполнить следующую проверку.
     //   }
     // }
 
-    let i = 0;
-    while (i < heshtegArray.length) {
-      if (!heshtegSymbol.test(heshtegArray[i])) {
-        console.log('error');
-        break;
-      }
-      console.log('ok');
+    for (let i = 0; i < heshtegArray.length; i++) {
+      const currentHeshteg = heshtegArray[i];
+      console.log(value.exec());
+      // if (value.exec(currentHeshteg)) {
+      //   console.log(currentHeshteg);
+      //   return console.log('error - heshteg povtoriaetsia');
+      // } else {
+      //   console.log(currentHeshteg);
+      //   return console.log('ok - heshteg ne povtoriaetsia'); // Нужно выполнить следующую проверку.
+      // }
     }
-    console.log(heshtegArray);
-
-    heshtegSymbol.test(value);// i -хештеги нечувствительны к регистру, m - поиск по всей строке.
-
-    //value.split(heshtegSymbol);
-    //value.match(heshtegSymbol);
-
-    // console.log(heshtegSymbol.test(value));
-    //console.log(heshtegSymbol.match(value));
   };
 
-  // хэштеги разделены пробелами #cat #DOG #F1ш #СЛоН35 #2птицЫ
-  // хэштеги не должны повторяться
+  // ====================================================================
+  // хэштеги разделены пробелами #cat #C0Бака #F1ш #СЛоН35 #2птицЫ #DOG
+  // хэштеги не должны повторяться #C0Бака #C0Бака #C0Бака #C0Бака
   // не больше 5 хэштегов
+  // ====================================================================
 
-  pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError);
+  pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError); // удалить за ненадобностью, Пристин сама все проверяет
 
-  const validateCommentsField = (value) => value.length <= 140;
-
-  pristine.addValidator(commentsField, validateCommentsField, 'До 140 символов');
+  // const validateCommentsField = (value) => value.length <= 140; // удалить за ненадобностью, Пристин сама все проверяет
+  // pristine.addValidator(commentsField, validateCommentsField, 'До 140 символов'); // удалить за ненадобностью, Пристин сама все проверяет
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -109,6 +102,7 @@ window.onload = function () {
     }
   });
 };
+
 // const cancellation = (evt) => {
 //   evt.stopPropagation();
 // };
