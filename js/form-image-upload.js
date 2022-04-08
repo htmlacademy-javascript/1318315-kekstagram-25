@@ -84,13 +84,15 @@ window.onload = function () {
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    return pristine.validate() ? true : false;
+    return pristine.validate() ? form.submit() : pristine.addError(hashtegError);
     // const isValid = pristine.validate();
     // if (isValid) {
     //   console.log('Mozhno otpravliat');
+    //   form.submit();
     //   return true;
     // }
     // console.log('forma nevalidna - est oshibki');
+    // pristine.addError(hashtegError);
     // return false;
   });
 
