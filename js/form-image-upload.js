@@ -40,8 +40,6 @@ const toEscFormClose = () => function (evt) {
 document.addEventListener('keydown', toEscFormClose());
 document.removeEventListener('keydown', toEscFormClose());
 
-
-
 // Валидация
 // хэштеги разделены пробелами #cat #C0Бака #F1ш #СЛоН35 #2птицЫ #DOG
 // хэштеги не должны повторяться #C0Бака #C0Бака #C0Бака #C0Бака
@@ -65,12 +63,15 @@ window.onload = function () {
         //   return true;
         // }
         // return false;
-        return heshtegSymbol.exec(currentHashtag) ? true : false;
+        return heshtegSymbol.exec(currentHashtag) ? true : false; // Если не указывать "? true : false", то условие выполняется некорректно!!!
       }
     };
 
-    const isHeshtegLength = (val) => (
-      val.length <= 5
+    // const isHeshtegLength = (val) => (
+    //   val.length <= 5
+    // );
+    const isHeshtegLength = (array) => (
+      array.length <= 5
     );
 
     console.log(isHeshtegUnique(heshtegArray));
@@ -83,22 +84,23 @@ window.onload = function () {
   pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError);
 
   form.addEventListener('submit', (evt) => {
+    //evt.preventDefault();
+    // return pristine.validate() ? form.submit() : pristine.addError(hashtagsField, hashtegError);
+    const isValid = pristine.validate();
+    if (isValid) {
+      console.log('Mozhno otpravliat');
+      form.submit();
+      return true;
+    }
     evt.preventDefault();
-    return pristine.validate() ? form.submit() : pristine.addError(hashtegError);
-    // const isValid = pristine.validate();
-    // if (isValid) {
-    //   console.log('Mozhno otpravliat');
-    //   form.submit();
-    //   return true;
-    // }
-    // console.log('forma nevalidna - est oshibki');
-    // pristine.addError(hashtegError);
-    // return false;
+    console.log('forma nevalidna - est oshibki');
+    pristine.addError(hashtagsField, hashtegError);
+    return false;
   });
 
   document.addEventListener('keydown', (evt) => {
     if (isEscKeydown(evt) && pristine.validate(evt.target)) {
-      evt.preventDefault();
+      //evt.preventDefault();
       evt.stopPropagation();
     }
   });
