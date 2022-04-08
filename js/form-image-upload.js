@@ -40,72 +40,64 @@ const toEscFormClose = () => function (evt) {
 document.addEventListener('keydown', toEscFormClose());
 document.removeEventListener('keydown', toEscFormClose());
 
-document.addEventListener('keydown', (evt) => {
-  if (form.querySelector('.text__hashtags input:focus') && isEscKeydown) {
-    evt.stopPropagation();
-  }
-});
+
 
 // Валидация
-const heshtegSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;// i -хештеги нечувствительны к регистру, m - поиск по всей строке.
+// хэштеги разделены пробелами #cat #C0Бака #F1ш #СЛоН35 #2птицЫ #DOG
+// хэштеги не должны повторяться #C0Бака #C0Бака #C0Бака #C0Бака
+// не больше 5 хэштегов
+const heshtegSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;
 
 window.onload = function () {
   const pristine = new Pristine(form);
-  // , {
-  // classTo: 'img-upload__text',
-  // errorTextParent: 'img-upload__text',
-  //   errorTextClass: 'img-upload__text-error', // Этого класса нет в разметке и нет в стилях
-  // });
 
   const validateHeshtegsField = (value) => {
-    const heshtegArray = value.split(/\s/, 5); // разбивает строку на массив, показывает 5шт
-    //
-    // for (let i = 0; i < heshtegArray.length; i++) {
-    //   if (!heshtegSymbol.test(heshtegArray[i])) {
-    //     return console.log('error - heshteg napisan ne pravilno'); // Нужно передать Пристине сообщение об ошибке!!!
-    //   } else {
-    //     return console.log('ok - heshteg napisan pravilno'); // Нужно выполнить следующую проверку.
-    //   }
-    // }
+    const heshtegArray = value.split(/\s/); // разбивает строку на массив
 
-    for (let i = 0; i < heshtegArray.length; i++) {
-      const currentHeshteg = heshtegArray[i];
-      console.log(value.exec());
-      // if (value.exec(currentHeshteg)) {
-      //   console.log(currentHeshteg);
-      //   return console.log('error - heshteg povtoriaetsia');
-      // } else {
-      //   console.log(currentHeshteg);
-      //   return console.log('ok - heshteg ne povtoriaetsia'); // Нужно выполнить следующую проверку.
-      // }
-    }
+    const isHeshtegUnique = (val) => (
+      val.length === new Set(val.map((text) => (text.toLowerCase()))).size
+    );
+
+    const isHeshtegPattern = () => {
+      for (let i = 0; i < heshtegArray.length; i++) {
+        const currentHashtag = heshtegArray[i];
+        // if (heshtegSymbol.exec(currentHashtag)) {
+        //   return true;
+        // }
+        // return false;
+        return heshtegSymbol.exec(currentHashtag) ? true : false;
+      }
+    };
+
+    const isHeshtegLength = (val) => (
+      val.length <= 5
+    );
+
+    console.log(isHeshtegUnique(heshtegArray));
+    console.log(isHeshtegPattern(heshtegArray));
+    console.log(isHeshtegLength(heshtegArray));
+
+    return isHeshtegUnique(heshtegArray) && isHeshtegPattern(heshtegArray) && isHeshtegLength(heshtegArray);
   };
 
-  // ====================================================================
-  // хэштеги разделены пробелами #cat #C0Бака #F1ш #СЛоН35 #2птицЫ #DOG
-  // хэштеги не должны повторяться #C0Бака #C0Бака #C0Бака #C0Бака
-  // не больше 5 хэштегов
-  // ====================================================================
-
-  pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError); // удалить за ненадобностью, Пристин сама все проверяет
-
-  // const validateCommentsField = (value) => value.length <= 140; // удалить за ненадобностью, Пристин сама все проверяет
-  // pristine.addValidator(commentsField, validateCommentsField, 'До 140 символов'); // удалить за ненадобностью, Пристин сама все проверяет
+  pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError);
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const isValid = pristine.validate();
-    if (isValid) {
-      console.log('Mozhno otpravliat');
-    } else {
-      console.log('forma nevalidna - est oshibki');
+    return pristine.validate() ? true : false;
+    // const isValid = pristine.validate();
+    // if (isValid) {
+    //   console.log('Mozhno otpravliat');
+    //   return true;
+    // }
+    // console.log('forma nevalidna - est oshibki');
+    // return false;
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscKeydown(evt) && pristine.validate(evt.target)) {
+      evt.preventDefault();
+      evt.stopPropagation();
     }
   });
 };
-
-// const cancellation = (evt) => {
-//   evt.stopPropagation();
-// };
-
-//hashtagsField.addEventListener('active', (evt) => evt.stopPropagation());
-// commentsField.addEventListener('focus', cancellation());
