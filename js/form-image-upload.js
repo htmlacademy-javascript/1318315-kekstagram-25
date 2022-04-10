@@ -15,22 +15,23 @@ const openFormUpload = () => {
   body.classList.add('modal-open');
 };
 
-openFile.addEventListener('change', () => {openFormUpload()});
-openFile.removeEventListener('change', () => {openFormUpload()});
+openFile.addEventListener('change', () => (openFormUpload()));
+openFile.removeEventListener('change', () => (openFormUpload()));
 
 // Закрытие формы по подстановке своего фото
 const closeFormUpload = () => {
   imageUpload.classList.add('hidden');
   body.classList.remove('modal-open');
-  open.value = '';
+  openFile.value = '';
   hashtagsField.value = '';
   commentsField.value = '';
 };
 
-close.addEventListener('click', () => {closeFormUpload()});
-close.removeEventListener('click', () => {closeFormUpload()});
+close.addEventListener('click', () => (closeFormUpload()));
+close.removeEventListener('click', () => (closeFormUpload()));
 
-const toEscFormClose = () => function (evt) {
+const toEscFormClose = (evt) => {
+  console.log(isEscKeydown(evt));
   if (isEscKeydown(evt)) {
     evt.preventDefault();
     closeFormUpload();
@@ -41,9 +42,6 @@ document.addEventListener('keydown', toEscFormClose());
 document.removeEventListener('keydown', toEscFormClose());
 
 // Валидация
-// хэштеги разделены пробелами #cat #C0Бака #F1ш #СЛоН35 #2птицЫ #DOG
-// хэштеги не должны повторяться #C0Бака #C0Бака #C0Бака #C0Бака
-// не больше 5 хэштегов
 const heshtegSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;
 
 window.onload = function () {
@@ -57,26 +55,23 @@ window.onload = function () {
     );
 
     const isHeshtegPattern = () => {
-      for (let i = 0; i < heshtegArray.length; i++) {
-        const currentHashtag = heshtegArray[i];
-        // if (heshtegSymbol.exec(currentHashtag)) {
-        //   return true;
-        // }
-        // return false;
-        return heshtegSymbol.exec(currentHashtag) ? true : false; // Если не указывать "? true : false", то условие выполняется некорректно!!!
+      if (heshtegArray.length === 1) {  // Для пустого поля хэштегов
+        return true;
+      } else {
+        for (let i = 0; i < heshtegArray.length; i++) {
+          const currentHashtag = heshtegArray[i];
+          return heshtegSymbol.exec(currentHashtag) ? true : false; // Если не указывать "? true : false", то условие выполняется некорректно!!!
+        }
       }
     };
 
-    // const isHeshtegLength = (val) => (
-    //   val.length <= 5
-    // );
-    const isHeshtegLength = (array) => (
-      array.length <= 5
+    const isHeshtegLength = (val) => (
+      val.length <= 5
     );
 
-    console.log(isHeshtegUnique(heshtegArray));
-    console.log(isHeshtegPattern(heshtegArray));
-    console.log(isHeshtegLength(heshtegArray));
+    // console.log(isHeshtegUnique(heshtegArray));
+    // console.log(isHeshtegPattern(heshtegArray));
+    // console.log(isHeshtegLength(heshtegArray));
 
     return isHeshtegUnique(heshtegArray) && isHeshtegPattern(heshtegArray) && isHeshtegLength(heshtegArray);
   };
@@ -84,24 +79,84 @@ window.onload = function () {
   pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError);
 
   form.addEventListener('submit', (evt) => {
-    //evt.preventDefault();
-    // return pristine.validate() ? form.submit() : pristine.addError(hashtagsField, hashtegError);
     const isValid = pristine.validate();
-    if (isValid) {
-      console.log('Mozhno otpravliat');
-      form.submit();
-      return true;
-    }
-    evt.preventDefault();
-    console.log('forma nevalidna - est oshibki');
-    pristine.addError(hashtagsField, hashtegError);
-    return false;
-  });
+    return isValid ? form.submit() : evt.preventDefault();
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscKeydown(evt) && pristine.validate(evt.target)) {
-      //evt.preventDefault();
-      evt.stopPropagation();
-    }
+    // const isValid = pristine.validate();
+    // if (isValid) {
+    //   console.log('Mozhno otpravliat');
+    //   form.submit();
+    //   return true;
+    // }
+    // evt.preventDefault();
+    // console.log('forma nevalidna - est oshibki');
+    // //pristine.addError(hashtagsField, hashtegError);
+    // return false;
   });
 };
+
+// Вариант 1
+// document.addEventListener('keydown', (evt) => {
+//   console.log(evt.target.addValidator);
+//   if (isEscKeydown(evt) && pristine.validate(evt.target.addValidator)) {
+//     //evt.preventDefault();
+//     evt.stopPropagation();
+//   }
+// });
+
+// Вариант 2
+// document.addEventListener('keydown', (evt) => {
+//   if (isEscKeydown(evt) && evt.target.addValidator) {
+//     //evt.preventDefault();
+//     evt.stopPropagation();
+//   }
+// }, false);
+
+// Вариант 3
+// const toEscFormDontClose = () => function (evt) {
+//   evt.stopPropagation();
+// };
+
+// if (isEscKeydown && `hashtagsField${:active}`) {
+//   document.addEventListener('keydown', toEscFormDontClose, false);
+// }
+
+// // Вариант 4
+// const toEscFormDontClose = (evt) => {
+//   evt.stopPropagation();
+// };
+
+// const activeHeshtegsField = document.activeElement;
+// const activeCommentsField = document.activeElement;
+
+// activeHeshtegsField.addEventListener('keydown', toEscFormDontClose, false);
+// activeHeshtegsField.removeEventListener('keydown', toEscFormDontClose, false);
+// activeCommentsField.addEventListener('keydown', toEscFormDontClose, false);
+// activeCommentsField.removeEventListener('keydown', toEscFormDontClose, false);
+
+// Вариант 5
+// const toEscFormDontClose = (evt) => {
+//   evt.stopPropagation();
+// };
+
+// const activeField = document.querySelector('.img-upload__text').activeElement;
+
+// if (activeField) {
+//   activeField.addEventListener('keydown', toEscFormDontClose, false);
+//   activeField.removeEventListener('keydown', toEscFormDontClose, false);
+// }
+
+// Вариант 6
+const toEscFormDontClose = (evt) => {
+  evt.stopPropagation();
+};
+
+if (hashtagsField.activeElement) {
+  hashtagsField.activeElement.addEventListener('keydown', toEscFormDontClose, false);
+  hashtagsField.activeElement.removeEventListener('keydown', toEscFormDontClose, false);
+}
+
+if (commentsField.activeElement) {
+  commentsField.activeElement.addEventListener('keydown', toEscFormDontClose, false);
+  commentsField.activeElement.removeEventListener('keydown', toEscFormDontClose, false);
+}
