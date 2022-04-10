@@ -69,10 +69,6 @@ window.onload = function () {
       val.length <= 5
     );
 
-    // console.log(isHeshtegUnique(heshtegArray));
-    // console.log(isHeshtegPattern(heshtegArray));
-    // console.log(isHeshtegLength(heshtegArray));
-
     return isHeshtegUnique(heshtegArray) && isHeshtegPattern(heshtegArray) && isHeshtegLength(heshtegArray);
   };
 
@@ -81,72 +77,10 @@ window.onload = function () {
   form.addEventListener('submit', (evt) => {
     const isValid = pristine.validate();
     return isValid ? form.submit() : evt.preventDefault();
-
-    // const isValid = pristine.validate();
-    // if (isValid) {
-    //   console.log('Mozhno otpravliat');
-    //   form.submit();
-    //   return true;
-    // }
-    // evt.preventDefault();
-    // console.log('forma nevalidna - est oshibki');
-    // //pristine.addError(hashtagsField, hashtegError);
-    // return false;
   });
 };
 
-// Вариант 1
-// document.addEventListener('keydown', (evt) => {
-//   console.log(evt.target.addValidator);
-//   if (isEscKeydown(evt) && pristine.validate(evt.target.addValidator)) {
-//     //evt.preventDefault();
-//     evt.stopPropagation();
-//   }
-// });
-
-// Вариант 2
-// document.addEventListener('keydown', (evt) => {
-//   if (isEscKeydown(evt) && evt.target.addValidator) {
-//     //evt.preventDefault();
-//     evt.stopPropagation();
-//   }
-// }, false);
-
-// Вариант 3
-// const toEscFormDontClose = () => function (evt) {
-//   evt.stopPropagation();
-// };
-
-// if (isEscKeydown && `hashtagsField${:active}`) {
-//   document.addEventListener('keydown', toEscFormDontClose, false);
-// }
-
-// // Вариант 4
-// const toEscFormDontClose = (evt) => {
-//   evt.stopPropagation();
-// };
-
-// const activeHeshtegsField = document.activeElement;
-// const activeCommentsField = document.activeElement;
-
-// activeHeshtegsField.addEventListener('keydown', toEscFormDontClose, false);
-// activeHeshtegsField.removeEventListener('keydown', toEscFormDontClose, false);
-// activeCommentsField.addEventListener('keydown', toEscFormDontClose, false);
-// activeCommentsField.removeEventListener('keydown', toEscFormDontClose, false);
-
-// Вариант 5
-// const toEscFormDontClose = (evt) => {
-//   evt.stopPropagation();
-// };
-
-// const activeField = document.querySelector('.img-upload__text').activeElement;
-
-// if (activeField) {
-//   activeField.addEventListener('keydown', toEscFormDontClose, false);
-//   activeField.removeEventListener('keydown', toEscFormDontClose, false);
-// }
-
-// Вариант 6
+// Отмена закрытия формы при нажатии на Esc
 const toEscFormDontClose = (evt) => {
   evt.stopPropagation();
 };
