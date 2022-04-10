@@ -31,7 +31,6 @@ close.addEventListener('click', () => (closeFormUpload()));
 close.removeEventListener('click', () => (closeFormUpload()));
 
 const toEscFormClose = (evt) => {
-  console.log(isEscKeydown(evt));
   if (isEscKeydown(evt)) {
     evt.preventDefault();
     closeFormUpload();
@@ -60,7 +59,10 @@ window.onload = function () {
       } else {
         for (let i = 0; i < heshtegArray.length; i++) {
           const currentHashtag = heshtegArray[i];
-          return heshtegSymbol.exec(currentHashtag) ? true : false; // Если не указывать "? true : false", то условие выполняется некорректно!!!
+          if (heshtegSymbol.exec(currentHashtag)) {
+            return true;
+          }
+          return false;
         }
       }
     };
