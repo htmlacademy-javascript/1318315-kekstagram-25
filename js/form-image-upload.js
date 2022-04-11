@@ -7,7 +7,7 @@ const imageUpload = form.querySelector('.img-upload__overlay');
 const close = form.querySelector('#upload-cancel');
 const hashtagsField = form.querySelector('.text__hashtags');
 const commentsField = form.querySelector('.text__description');
-const hashtegError = 'Должно быть минимум два символа. Максимальная длина одного #ХэшТега - 20 символов, можно написать самое большее пять #ХэшТегов. Используйте кириллицу, латиницу и цифры.';
+const hashtagError = 'Должно быть минимум два символа. Максимальная длина одного #ХэшТега - 20 символов, можно написать самое большее пять #ХэшТегов. Используйте кириллицу, латиницу и цифры.';
 
 // Открытие формы для подстановки своего фото
 const openFormUpload = () => {
@@ -16,7 +16,6 @@ const openFormUpload = () => {
 };
 
 openFile.addEventListener('change', () => (openFormUpload()));
-openFile.removeEventListener('change', () => (openFormUpload()));
 
 // Закрытие формы по подстановке своего фото
 const closeFormUpload = () => {
@@ -25,74 +24,74 @@ const closeFormUpload = () => {
   openFile.value = '';
   hashtagsField.value = '';
   commentsField.value = '';
+  toDeleteEventListeners();
 };
 
 close.addEventListener('click', () => (closeFormUpload()));
-close.removeEventListener('click', () => (closeFormUpload()));
 
 const toEscFormClose = (evt) => {
   if (isEscKeydown(evt)) {
     evt.preventDefault();
-    closeFormUpload();
+    if (document.activeElement === hashtagsField || document.activeElement === commentsField) {
+      evt.stopPropagation();
+    } else {
+      closeFormUpload();
+    }
   }
 };
 
 document.addEventListener('keydown', toEscFormClose());
-document.removeEventListener('keydown', toEscFormClose());
+
+function toDeleteEventListeners () {
+  openFile.removeEventListener('change', () => (openFormUpload()));
+  close.removeEventListener('click', () => (closeFormUpload()));
+  document.removeEventListener('keydown', toEscFormClose());
+}
 
 // Валидация
-const heshtegSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;
+const hashtagSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;
 
 window.onload = function () {
   const pristine = new Pristine(form);
 
-  const validateHeshtegsField = (value) => {
-    const heshtegArray = value.split(/\s/); // разбивает строку на массив
+  const validateHashtagsField = (value) => {
+    const hashtagArray = value.split(/\s/); // разбивает строку на массив
 
-    const isHeshtegUnique = (val) => (
+    const isHashtagUnique = (val) => (
       val.length === new Set(val.map((text) => (text.toLowerCase()))).size
     );
 
-    const isHeshtegPattern = () => {
-      if (heshtegArray.length === 1) {  // Для пустого поля хэштегов
+    const isHashtagPattern = () => {
+      if (hashtagArray.length === 1) {  // Для пустого поля хэштегов
         return true;
       } else {
-        for (let i = 0; i < heshtegArray.length; i++) {
-          const currentHashtag = heshtegArray[i];
-          if (heshtegSymbol.exec(currentHashtag)) {
-            return true;
-          }
-          return false;
+        for (let i = 0; i < hashtagArray.length; i++) {
+          const currentHashtag = hashtagArray[i];
+          // if (hashtagSymbol.exec(currentHashtag)) {
+          //   return true;
+          // }
+          // return false;
+          return hashtagSymbol.exec(currentHashtag);
         }
       }
     };
 
-    const isHeshtegLength = (val) => (
+    const isHashtagLength = (val) => (
       val.length <= 5
     );
 
-    return isHeshtegUnique(heshtegArray) && isHeshtegPattern(heshtegArray) && isHeshtegLength(heshtegArray);
+    // console.log(isHashtagUnique(hashtagArray));
+    // console.log(isHashtagPattern(hashtagArray));
+    // console.log(isHashtagLength(hashtagArray));
+
+    return isHashtagUnique(hashtagArray) && isHashtagPattern(hashtagArray) && isHashtagLength(hashtagArray);
   };
 
-  pristine.addValidator(hashtagsField, validateHeshtegsField, hashtegError);
+  pristine.addValidator(hashtagsField, validateHashtagsField, hashtagError);
 
   form.addEventListener('submit', (evt) => {
     const isValid = pristine.validate();
+    //console.log(isValid);
     return isValid ? form.submit() : evt.preventDefault();
   });
 };
-
-// Отмена закрытия формы при нажатии на Esc
-const toEscFormDontClose = (evt) => {
-  evt.stopPropagation();
-};
-
-if (hashtagsField.activeElement) {
-  hashtagsField.activeElement.addEventListener('keydown', toEscFormDontClose, false);
-  hashtagsField.activeElement.removeEventListener('keydown', toEscFormDontClose, false);
-}
-
-if (commentsField.activeElement) {
-  commentsField.activeElement.addEventListener('keydown', toEscFormDontClose, false);
-  commentsField.activeElement.removeEventListener('keydown', toEscFormDontClose, false);
-}
