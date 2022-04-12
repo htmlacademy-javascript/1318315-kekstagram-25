@@ -15,7 +15,12 @@ const openFormUpload = () => {
   body.classList.add('modal-open');
 };
 
-openFile.addEventListener('change', () => (openFormUpload()));
+const toOpenForm = () => {
+  openFormUpload();
+  toCreateEventListeners();
+};
+
+openFile.addEventListener('change', toOpenForm);
 
 // Закрытие формы по подстановке своего фото
 const closeFormUpload = () => {
@@ -24,28 +29,37 @@ const closeFormUpload = () => {
   openFile.value = '';
   hashtagsField.value = '';
   commentsField.value = '';
+};
+
+const toCloseForm = () => function () {
+  closeFormUpload();
   toDeleteEventListeners();
 };
 
-close.addEventListener('click', () => (closeFormUpload()));
+//close.addEventListener('click', closeFormUpload);
 
-const toEscFormClose = (evt) => {
+const toEscCloseForm = () => function (evt) {
   if (isEscKeydown(evt)) {
     evt.preventDefault();
     if (document.activeElement === hashtagsField || document.activeElement === commentsField) {
       evt.stopPropagation();
     } else {
-      closeFormUpload();
+      toCloseForm();
     }
   }
 };
 
-document.addEventListener('keydown', toEscFormClose());
+//document.addEventListener('keydown', toEscCloseForm);
+
+function toCreateEventListeners () {
+  close.addEventListener('click', closeFormUpload);
+  document.addEventListener('keydown', toEscCloseForm);
+}
 
 function toDeleteEventListeners () {
-  openFile.removeEventListener('change', () => (openFormUpload()));
-  close.removeEventListener('click', () => (closeFormUpload()));
-  document.removeEventListener('keydown', toEscFormClose());
+  openFile.removeEventListener('change', openFormUpload);
+  close.removeEventListener('click', toCloseForm);
+  document.removeEventListener('keydown', toEscCloseForm);
 }
 
 // Валидация
@@ -67,11 +81,11 @@ window.onload = function () {
       } else {
         for (let i = 0; i < hashtagArray.length; i++) {
           const currentHashtag = hashtagArray[i];
-          // if (hashtagSymbol.exec(currentHashtag)) {
-          //   return true;
-          // }
-          // return false;
-          return hashtagSymbol.exec(currentHashtag);
+          if (hashtagSymbol.exec(currentHashtag)) {
+            return true;
+          }
+          return false;
+          //return hashtagSymbol.exec(currentHashtag); // В такой форме записи функция возвращает не тот результат, который нужен
         }
       }
     };
@@ -80,10 +94,6 @@ window.onload = function () {
       val.length <= 5
     );
 
-    // console.log(isHashtagUnique(hashtagArray));
-    // console.log(isHashtagPattern(hashtagArray));
-    // console.log(isHashtagLength(hashtagArray));
-
     return isHashtagUnique(hashtagArray) && isHashtagPattern(hashtagArray) && isHashtagLength(hashtagArray);
   };
 
@@ -91,7 +101,6 @@ window.onload = function () {
 
   form.addEventListener('submit', (evt) => {
     const isValid = pristine.validate();
-    //console.log(isValid);
     return isValid ? form.submit() : evt.preventDefault();
   });
 };
