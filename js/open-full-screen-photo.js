@@ -20,20 +20,20 @@ const closePhoto = () => {
   body.classList.remove('modal-open');
 };
 
-const toCloseFullScreen = () => function (evt) {
+const toCloseFullScreen = (evt) => {
   evt.preventDefault();
   closePhoto();
 };
 
-const toEscFullScreen = () => function (evt) {
+const toEscFullScreen = (evt) => {
   if (isEscKeydown(evt)) {
     evt.preventDefault();
     closePhoto();
   }
 };
 
-close.addEventListener('click', toCloseFullScreen());
-close.removeEventListener('click', toCloseFullScreen());
+close.addEventListener('click', toCloseFullScreen);
+//close.removeEventListener('click', toCloseFullScreen()); // Нужно будет перенести вдругой модуль, когда будет фильтрация и перерисовка фото.
 
-document.addEventListener('keydown', toEscFullScreen());
-document.removeEventListener('keydown', toEscFullScreen());
+document.addEventListener('keydown', toEscFullScreen);
+//document.removeEventListener('keydown', toEscFullScreen()); // Нужно будет перенести вдругой модуль, когда будет фильтрация и перерисовка фото.

@@ -31,14 +31,12 @@ const closeFormUpload = () => {
   commentsField.value = '';
 };
 
-const toCloseForm = () => function () {
+const toCloseForm = () => {
   closeFormUpload();
   toDeleteEventListeners();
 };
 
-//close.addEventListener('click', closeFormUpload);
-
-const toEscCloseForm = () => function (evt) {
+const toEscCloseForm = (evt) => {
   if (isEscKeydown(evt)) {
     evt.preventDefault();
     if (document.activeElement === hashtagsField || document.activeElement === commentsField) {
@@ -49,15 +47,12 @@ const toEscCloseForm = () => function (evt) {
   }
 };
 
-//document.addEventListener('keydown', toEscCloseForm);
-
 function toCreateEventListeners () {
-  close.addEventListener('click', closeFormUpload);
+  close.addEventListener('click', toCloseForm);
   document.addEventListener('keydown', toEscCloseForm);
 }
 
 function toDeleteEventListeners () {
-  openFile.removeEventListener('change', openFormUpload);
   close.removeEventListener('click', toCloseForm);
   document.removeEventListener('keydown', toEscCloseForm);
 }
