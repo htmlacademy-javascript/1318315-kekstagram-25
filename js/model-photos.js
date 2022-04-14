@@ -81,7 +81,7 @@ const createComment = () => {
 
 const createArrayComments = () => {
   const comments = [];
-  for (let i = 0; i <= 4; i++) {
+  for (let i = 0; i <= 17; i++) {
     const newComment = createComment();
     comments.push(newComment);
   }

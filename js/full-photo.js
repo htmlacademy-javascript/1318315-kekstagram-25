@@ -1,5 +1,6 @@
 const fullScreenPhoto = document.querySelector('.big-picture');
 const body = document.querySelector('body');
+const loaderComments = document.querySelector('.social__comment-count');
 
 const IMG_WIDTH = 35;
 const IMG_HEIGHT = 35;
@@ -40,8 +41,8 @@ const insertComments = (comments) => {
 
 // Функция-шаблон отрисовки полноэкранного фото
 const drawFullScreenPhoto = (photo) => {
-  fullScreenPhoto.querySelector('.social__comment-count').classList.add('hidden');
-  fullScreenPhoto.querySelector('.comments-loader').classList.add('hidden');
+  fullScreenPhoto.querySelector('.social__comment-count').classList.remove('hidden');
+  fullScreenPhoto.querySelector('.comments-loader').classList.remove('hidden');
   fullScreenPhoto.classList.remove('hidden');
   body.classList.add('modal-open');
 
@@ -50,8 +51,18 @@ const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.likes-count').append(photo.likes);
   fullScreenPhoto.querySelector('.social__caption').append(photo.description);
   fullScreenPhoto.querySelector('.comments-count').textContent = photo.comments.length;
-  const cureentComments = insertComments(photo.comments);
-  fullScreenPhoto.querySelector('.social__comments').replaceWith(cureentComments);
+
+  let n = 0;
+  const currentComments = insertComments(photo.comments.slice(n, n += 5));
+
+  loaderComments.addEventListener('click', () => {
+    currentComments.concat(currentComments);
+    return currentComments;
+  });
+
+  fullScreenPhoto.querySelector('.social__comment-count').textContent = `${photo.comments.slice(n, n += 5).length} из комментариев`;
+
+  fullScreenPhoto.querySelector('.social__comments').replaceWith(currentComments);
 };
 
 export {drawFullScreenPhoto, fullScreenPhoto, body};
