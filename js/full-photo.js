@@ -1,6 +1,7 @@
 const fullScreenPhoto = document.querySelector('.big-picture');
 const body = document.querySelector('body');
-const loaderComments = document.querySelector('.social__comment-count');
+//const countComments = document.querySelector('.social__comment-count');
+const loaderComments = document.querySelector('.comments-loader');
 
 const IMG_WIDTH = 35;
 const IMG_HEIGHT = 35;
@@ -49,18 +50,42 @@ const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.big-picture__img img').src = photo.url;
   fullScreenPhoto.querySelector('.likes-count').textContent = '';
   fullScreenPhoto.querySelector('.likes-count').append(photo.likes);
+  fullScreenPhoto.querySelector('.social__caption').textContent = '';
   fullScreenPhoto.querySelector('.social__caption').append(photo.description);
   fullScreenPhoto.querySelector('.comments-count').textContent = photo.comments.length;
+  const currentComments = insertComments(photo.comments.slice(0, 5));
+  // console.log(currentComments);
+  // console.log(currentComments.children);
 
-  let n = 0;
-  const currentComments = insertComments(photo.comments.slice(n, n += 5));
+  let n = 5;
 
   loaderComments.addEventListener('click', () => {
-    currentComments.concat(currentComments);
-    return currentComments;
+    if (n < photo.comments.length) {
+      const nextComments = insertComments(photo.comments.slice(n, n += 5));
+
+      // Оба варианта выдают ошибку:
+      // currentComments.insertBefore(nextComments.children, currentComments.children.nextSibling);
+      currentComments.appendChild(nextComments.children);
+
+      // console.log('est esche commentarii');
+      n += 5;
+
+      return currentComments;
+    } else {
+      // console.log('comments zakonchilis');
+      const nextComments = insertComments(photo.comments.slice(n, n += 5));
+
+      // Оба варианта выдают ошибку:
+      // currentComments.insertBefore(nextComments.children, currentComments.children.nextSibling);
+      currentComments.appendChild(nextComments.children);
+
+      loaderComments.classList.add('hidden');
+      n = 5;
+    }
+    //console.log('n = ' + n);
   });
 
-  fullScreenPhoto.querySelector('.social__comment-count').textContent = `${photo.comments.slice(n, n += 5).length} из комментариев`;
+  //fullScreenPhoto.querySelector('.social__comment-count').textContent = `${photo.comments.slice(n, n += 5).length} из комментариев`;
 
   fullScreenPhoto.querySelector('.social__comments').replaceWith(currentComments);
 };
