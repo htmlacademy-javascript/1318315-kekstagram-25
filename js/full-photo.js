@@ -47,12 +47,18 @@ const insertComments = (comments) => {
     const documentFragment = document.createDocumentFragment();
     if (n < comments.length) {
       const nextComments = arrayComments.slice(n, n += 5);
+
+      documentFragment.insertBefore(nextComments, currentComments.nextSibling); // Ошибка: Node.insertBefore: Argument 1 does not implement interface Node.
       documentFragment.appendChild(nextComments); // Ошибка: Node.appendChild: Argument 1 does not implement interface Node.
+      documentFragment.appendChild(nextComments.children); // Ошибка: Node.appendChild: Argument 1 is not an object.
+
       currentComments.appendChild(documentFragment);
       n += 5;
     } else {
       const nextComments = arrayComments.slice(n, n += 5);
-      documentFragment.appendChild(nextComments.children); // Ошибка: Node.appendChild: Argument 1 is not an object.
+
+      // здесь должна быть строка по вставке комментариев - см.выше один из трех вариантов.
+
       currentComments.appendChild(documentFragment);
       n = 5;
       loaderComments.classList.add('hidden');
