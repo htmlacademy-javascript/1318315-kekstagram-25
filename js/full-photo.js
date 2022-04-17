@@ -37,7 +37,29 @@ const insertComments = (comments) => {
     const newComment = insertComment(comments[i]);
     commentsArray.appendChild(newComment);
   }
-  return commentsArray;
+
+  const arrayComments = Array.from(commentsArray);
+
+  let n = 0;
+  const currentComments = arrayComments.slice(n, n += 5);
+
+  loaderComments.addEventListener('click', () => {
+    const documentFragment = document.createDocumentFragment();
+    if (n < comments.length) {
+      const nextComments = arrayComments.slice(n, n += 5);
+      documentFragment.appendChild(nextComments); // Ошибка: Node.appendChild: Argument 1 does not implement interface Node.
+      currentComments.appendChild(documentFragment);
+      n += 5;
+    } else {
+      const nextComments = arrayComments.slice(n, n += 5);
+      documentFragment.appendChild(nextComments.children); // Ошибка: Node.appendChild: Argument 1 is not an object.
+      currentComments.appendChild(documentFragment);
+      n = 5;
+      loaderComments.classList.add('hidden');
+    }
+  });
+
+  return currentComments;
 };
 
 // Функция-шаблон отрисовки полноэкранного фото
@@ -53,40 +75,9 @@ const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.social__caption').textContent = '';
   fullScreenPhoto.querySelector('.social__caption').append(photo.description);
   fullScreenPhoto.querySelector('.comments-count').textContent = photo.comments.length;
-  const currentComments = insertComments(photo.comments.slice(0, 5));
-  // console.log(currentComments);
-  // console.log(currentComments.children);
-
-  let n = 5;
-
-  loaderComments.addEventListener('click', () => {
-    if (n < photo.comments.length) {
-      const nextComments = insertComments(photo.comments.slice(n, n += 5));
-
-      // Оба варианта выдают ошибку:
-      // currentComments.insertBefore(nextComments.children, currentComments.children.nextSibling);
-      currentComments.appendChild(nextComments.children);
-
-      // console.log('est esche commentarii');
-      n += 5;
-
-      return currentComments;
-    } else {
-      // console.log('comments zakonchilis');
-      const nextComments = insertComments(photo.comments.slice(n, n += 5));
-
-      // Оба варианта выдают ошибку:
-      // currentComments.insertBefore(nextComments.children, currentComments.children.nextSibling);
-      currentComments.appendChild(nextComments.children);
-
-      loaderComments.classList.add('hidden');
-      n = 5;
-    }
-    //console.log('n = ' + n);
-  });
 
   //fullScreenPhoto.querySelector('.social__comment-count').textContent = `${photo.comments.slice(n, n += 5).length} из комментариев`;
-
+  const currentComments = insertComments(photo.comments);
   fullScreenPhoto.querySelector('.social__comments').replaceWith(currentComments);
 };
 
