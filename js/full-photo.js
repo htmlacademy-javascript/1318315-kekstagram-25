@@ -58,6 +58,7 @@ const insertComments = (comments) => {
       const nextComments = arrayComments.slice(n, n += 5);
 
       // здесь должна быть строка по вставке комментариев - см.выше один из трех вариантов.
+      documentFragment.appendChild(nextComments);
 
       currentComments.appendChild(documentFragment);
       n = 5;
