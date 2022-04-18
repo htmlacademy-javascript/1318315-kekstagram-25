@@ -2,6 +2,7 @@ const fullScreenPhoto = document.querySelector('.big-picture');
 const body = document.querySelector('body');
 //const countComments = document.querySelector('.social__comment-count');
 const loaderComments = document.querySelector('.comments-loader');
+const commentsArray = fullScreenPhoto.querySelector('.social__comments');
 
 const IMG_WIDTH = 35;
 const IMG_HEIGHT = 35;
@@ -28,45 +29,38 @@ const insertComment = (object) => {
   return newComment;
 };
 
-// Функция по подстановке комментариев
-const insertComments = (comments) => {
-  const commentsArray = fullScreenPhoto.querySelector('.social__comments');
-  commentsArray.textContent = '';
-
+// Функция для вставки блока комментариев
+const appendComments = (comments) => {
+  const documentFragment = document.createDocumentFragment();
   for (let i = 0; i < comments.length; i++) {
     const newComment = insertComment(comments[i]);
-    commentsArray.appendChild(newComment);
+    documentFragment.appendChild(newComment);
   }
+  return documentFragment;
+};
 
-  const arrayComments = Array.from(commentsArray);
-
+// Функция по подстановке комментариев
+const insertComments = (comments) => {
+  commentsArray.textContent = '';
   let n = 0;
-  const currentComments = arrayComments.slice(n, n += 5);
+  const currentComments = comments.slice(n, n += 5);
+  let fragment = appendComments(currentComments); // lint требует использование const, а не let
+  commentsArray.appendChild(fragment);
 
   loaderComments.addEventListener('click', () => {
-    const documentFragment = document.createDocumentFragment();
     if (n < comments.length) {
-      const nextComments = arrayComments.slice(n, n += 5);
-
-      documentFragment.insertBefore(nextComments, currentComments.nextSibling); // Ошибка: Node.insertBefore: Argument 1 does not implement interface Node.
-      documentFragment.appendChild(nextComments); // Ошибка: Node.appendChild: Argument 1 does not implement interface Node.
-      documentFragment.appendChild(nextComments.children); // Ошибка: Node.appendChild: Argument 1 is not an object.
-
-      currentComments.appendChild(documentFragment);
+      const nextComments = comments.slice(n, n += 5);
+      fragment.appendChild(nextComments);
+      commentsArray.appendChild(fragment);
       n += 5;
     } else {
-      const nextComments = arrayComments.slice(n, n += 5);
-
-      // здесь должна быть строка по вставке комментариев - см.выше один из трех вариантов.
-      documentFragment.appendChild(nextComments);
-
-      currentComments.appendChild(documentFragment);
+      const nextComments = comments.slice(n, n += 5);
+      fragment.appendChild(nextComments);
+      commentsArray.appendChild(fragment);
       n = 5;
       loaderComments.classList.add('hidden');
     }
   });
-
-  return currentComments;
 };
 
 // Функция-шаблон отрисовки полноэкранного фото
@@ -84,8 +78,10 @@ const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.comments-count').textContent = photo.comments.length;
 
   //fullScreenPhoto.querySelector('.social__comment-count').textContent = `${photo.comments.slice(n, n += 5).length} из комментариев`;
+
   const currentComments = insertComments(photo.comments);
-  fullScreenPhoto.querySelector('.social__comments').replaceWith(currentComments);
+  //fullScreenPhoto.querySelector('.social__comments').replaceWith(currentComments);
+  commentsArray.textContent = currentComments;
 };
 
 export {drawFullScreenPhoto, fullScreenPhoto, body};
