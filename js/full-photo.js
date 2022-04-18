@@ -39,28 +39,37 @@ const appendComments = (comments) => {
   return documentFragment;
 };
 
+let n = 0;
 // Функция по подстановке комментариев
 const insertComments = (comments) => {
   commentsArray.textContent = '';
-  let n = 0;
+  let fragment;
   const currentComments = comments.slice(n, n += 5);
-  let fragment = appendComments(currentComments); // lint требует использование const, а не let
+  fragment = appendComments(currentComments);
   commentsArray.appendChild(fragment);
+  fullScreenPhoto.querySelector('.number-displayed-comments').textContent = n;
 
   loaderComments.addEventListener('click', () => {
     if (n < comments.length) {
       const nextComments = comments.slice(n, n += 5);
-      fragment.appendChild(nextComments);
+      fragment = appendComments(nextComments);
       commentsArray.appendChild(fragment);
-      n += 5;
-    } else {
-      const nextComments = comments.slice(n, n += 5);
-      fragment.appendChild(nextComments);
-      commentsArray.appendChild(fragment);
-      n = 5;
-      loaderComments.classList.add('hidden');
+      if (n >= comments.length) {
+        n = comments.length;
+        loaderComments.classList.add('hidden');
+      }
+      fullScreenPhoto.querySelector('.number-displayed-comments').textContent = n;
     }
   });
+
+  if (n < 5) {
+    const littleComments = comments.slice(n, comments.length);
+    fragment = appendComments(littleComments);
+    commentsArray.appendChild(fragment);
+    n = comments.length;
+    fullScreenPhoto.querySelector('.number-displayed-comments').textContent = n;
+    loaderComments.classList.add('hidden');
+  }
 };
 
 // Функция-шаблон отрисовки полноэкранного фото
@@ -77,11 +86,7 @@ const drawFullScreenPhoto = (photo) => {
   fullScreenPhoto.querySelector('.social__caption').append(photo.description);
   fullScreenPhoto.querySelector('.comments-count').textContent = photo.comments.length;
 
-  //fullScreenPhoto.querySelector('.social__comment-count').textContent = `${photo.comments.slice(n, n += 5).length} из комментариев`;
-
-  const currentComments = insertComments(photo.comments);
-  //fullScreenPhoto.querySelector('.social__comments').replaceWith(currentComments);
-  commentsArray.textContent = currentComments;
+  insertComments(photo.comments);
 };
 
 export {drawFullScreenPhoto, fullScreenPhoto, body};
