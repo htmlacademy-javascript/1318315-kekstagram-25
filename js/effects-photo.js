@@ -161,41 +161,77 @@ effects.addEventListener('change', (evt) => {
         //console.log('none');
         noneUpdateOptions();
         slider.classList.add('visually-hidden');
-        photoPreview.style.filter = ''; // НЕ СБРАСЫВАЕТСЯ ЭФФЕКТ ПРЕДЫДУЩЕГО ВЫБОРА --- ???
+        photoPreview.style.filter = '';
         // console.log(photoPreview.style.filter);
+        photoPreview.classList.remove('effects__preview--none');
+        photoPreview.classList.remove('effects__preview--chrome');
+        photoPreview.classList.remove('effects__preview--sepia');
+        photoPreview.classList.remove('effects__preview--marvin');
+        photoPreview.classList.remove('effects__preview--phobos');
+        photoPreview.classList.remove('effects__preview--heat');
         break;
       case 'chrome':
         //console.log('chrome');
         chromeUpdateOptions();
+        slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `grayscale(${levelEffect.value})`;
+        photoPreview.classList.remove('effects__preview--none');
+        photoPreview.classList.remove('effects__preview--sepia');
+        photoPreview.classList.remove('effects__preview--marvin');
+        photoPreview.classList.remove('effects__preview--phobos');
+        photoPreview.classList.remove('effects__preview--heat');
         // console.log(photoPreview.style.filter);
         // console.log(`grayscale(${levelEffect.value})`);
         break;
       case 'sepia':
         //console.log('sepia');
         sepiaUpdateOptions();
+        slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `sepia(${levelEffect.value})`;
+        photoPreview.classList.remove('effects__preview--none');
+        photoPreview.classList.remove('effects__preview--chrome');
+        photoPreview.classList.remove('effects__preview--marvin');
+        photoPreview.classList.remove('effects__preview--phobos');
+        photoPreview.classList.remove('effects__preview--heat');
         // console.log(photoPreview.style.filter);
         // console.log(`sepia(${levelEffect.value})`);
         break;
       case 'marvin':
         //console.log('marvin');
         marvinUpdateOptions();
+        slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `invert(${levelEffect.value}%)`;
+        photoPreview.classList.remove('effects__preview--none');
+        photoPreview.classList.remove('effects__preview--chrome');
+        photoPreview.classList.remove('effects__preview--sepia');
+        photoPreview.classList.remove('effects__preview--phobos');
+        photoPreview.classList.remove('effects__preview--heat');
         // console.log(photoPreview.style.filter);
         // console.log(`invert(${levelEffect.value}%)`);
         break;
       case 'phobos':
         //console.log('phobos');
         phobosUpdateOptions();
+        slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `blur(${levelEffect.value}px)`;
+        photoPreview.classList.remove('effects__preview--none');
+        photoPreview.classList.remove('effects__preview--chrome');
+        photoPreview.classList.remove('effects__preview--sepia');
+        photoPreview.classList.remove('effects__preview--marvin');
+        photoPreview.classList.remove('effects__preview--heat');
         // console.log(photoPreview.style.filter);
         // console.log(`blur(${levelEffect.value}px)`);
         break;
       case 'heat':
         //console.log('heat');
         heatUpdateOptions();
+        slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `brightness(${levelEffect.value})`;
+        photoPreview.classList.remove('effects__preview--none');
+        photoPreview.classList.remove('effects__preview--chrome');
+        photoPreview.classList.remove('effects__preview--sepia');
+        photoPreview.classList.remove('effects__preview--marvin');
+        photoPreview.classList.remove('effects__preview--phobos');
         // console.log(photoPreview.style.filter);
         // console.log(`brightness(${levelEffect.value})`);
         break;
