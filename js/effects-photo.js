@@ -7,7 +7,8 @@ const scaleMore = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
 const photoPreview = document.querySelector('.img-upload__preview');
 const effects = document.querySelector('.effects__list');
-const slider = document.querySelector('.effect-level__slider');
+const slider = document.querySelector('.img-upload__effect-level');
+const sliderControl = document.querySelector('.effect-level__slider');
 const levelEffect = document.querySelector('.effect-level__value');
 
 
@@ -22,10 +23,6 @@ const toEnlargePhoto = (evt) => {
     scaleValue.value = `${valueScaleControl -= STEP_VALUE}%`;
     photoPreview.style.transform = `scale(${valueScale -= STEP_SCALE})`;
   }
-  // if (scaleValue.value == MIN_VALUE) { // не получается написать такое условие, чтобы оно срабатывало для блокирования кнопки
-  //   console.log('click === 25');
-  //   scaleSmaller.setAttribute('disabled', true);
-  // }
 };
 
 const toReducePhoto = (evt) => {
@@ -34,10 +31,6 @@ const toReducePhoto = (evt) => {
     scaleValue.value = `${valueScaleControl += STEP_VALUE}%`;
     photoPreview.style.transform = `scale(${valueScale += STEP_SCALE})`;
   }
-  // if (scaleValue.value == MAX_VALUE) { // не получается написать такое условие, чтобы оно срабатывало для блокирования кнопки
-  //   console.log('click === 25');
-  //   scaleMore.setAttribute('disabled', true);
-  // }
 };
 
 scaleSmaller.addEventListener('click', toEnlargePhoto);
@@ -46,12 +39,13 @@ scaleMore.addEventListener('click', toReducePhoto);
 // scaleSmaller.removeEventListener('click', toEnlargePhoto);
 // scaleMore.removeEventListener('click', toReducePhoto);
 
-//____________________________________________
+
 // Наложение эффекта на загружаемую фотографию
+slider.classList.add('visually-hidden');
+
 const toAddEffects = (evt) => {
   evt.preventDefault();
   photoPreview.classList.add(`effects__preview--${evt.target.value}`);
-  // photoPreview.classList.add(`effects__preview--${evt.target.value}`).style.filter = ''; // сработает или не сработает -? при добавлении класса добавлять и эффект --- ???
 };
 
 effects.addEventListener('change', toAddEffects);
@@ -61,7 +55,7 @@ effects.addEventListener('change', toAddEffects);
 
 // Регулировка эффекта слайдером
 
-noUiSlider.create(slider, {
+noUiSlider.create(sliderControl, {
   range: {
     min: 0,
     max: 100,
@@ -83,7 +77,7 @@ noUiSlider.create(slider, {
 });
 
 const noneUpdateOptions = () => {
-  slider.noUiSlider.updateOptions({
+  sliderControl.noUiSlider.updateOptions({
     range: {
       min: 0,
       max: 100,
@@ -94,7 +88,7 @@ const noneUpdateOptions = () => {
 };
 
 const chromeUpdateOptions = () => {
-  slider.noUiSlider.updateOptions({
+  sliderControl.noUiSlider.updateOptions({
     range: {
       min: 0,
       max: 1,
@@ -105,7 +99,7 @@ const chromeUpdateOptions = () => {
 };
 
 const sepiaUpdateOptions = () => {
-  slider.noUiSlider.updateOptions({
+  sliderControl.noUiSlider.updateOptions({
     range: {
       min: 0,
       max: 1,
@@ -116,7 +110,7 @@ const sepiaUpdateOptions = () => {
 };
 
 const marvinUpdateOptions = () => {
-  slider.noUiSlider.updateOptions({
+  sliderControl.noUiSlider.updateOptions({
     range: {
       min: 0,
       max: 100,
@@ -127,7 +121,7 @@ const marvinUpdateOptions = () => {
 };
 
 const phobosUpdateOptions = () => {
-  slider.noUiSlider.updateOptions({
+  sliderControl.noUiSlider.updateOptions({
     range: {
       min: 0,
       max: 3,
@@ -138,7 +132,7 @@ const phobosUpdateOptions = () => {
 };
 
 const heatUpdateOptions = () => {
-  slider.noUiSlider.updateOptions({
+  sliderControl.noUiSlider.updateOptions({
     range: {
       min: 1,
       max: 3,
@@ -148,21 +142,17 @@ const heatUpdateOptions = () => {
   });
 };
 
-slider.noUiSlider.on('update', () => {
-  levelEffect.value = slider.noUiSlider.get();
-  //console.log(`slider value - ${levelEffect.value}`);
+sliderControl.noUiSlider.on('update', () => {
+  levelEffect.value = sliderControl.noUiSlider.get();
 });
 
 effects.addEventListener('change', (evt) => {
   if (evt.target.checked) {
-    //console.log(`click - current effect - ${evt.target.value}`);
     switch (evt.target.value) {
       case 'none':
-        //console.log('none');
         noneUpdateOptions();
         slider.classList.add('visually-hidden');
         photoPreview.style.filter = '';
-        // console.log(photoPreview.style.filter);
         photoPreview.classList.remove('effects__preview--none');
         photoPreview.classList.remove('effects__preview--chrome');
         photoPreview.classList.remove('effects__preview--sepia');
@@ -171,7 +161,6 @@ effects.addEventListener('change', (evt) => {
         photoPreview.classList.remove('effects__preview--heat');
         break;
       case 'chrome':
-        //console.log('chrome');
         chromeUpdateOptions();
         slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `grayscale(${levelEffect.value})`;
@@ -180,11 +169,8 @@ effects.addEventListener('change', (evt) => {
         photoPreview.classList.remove('effects__preview--marvin');
         photoPreview.classList.remove('effects__preview--phobos');
         photoPreview.classList.remove('effects__preview--heat');
-        // console.log(photoPreview.style.filter);
-        // console.log(`grayscale(${levelEffect.value})`);
         break;
       case 'sepia':
-        //console.log('sepia');
         sepiaUpdateOptions();
         slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `sepia(${levelEffect.value})`;
@@ -193,11 +179,8 @@ effects.addEventListener('change', (evt) => {
         photoPreview.classList.remove('effects__preview--marvin');
         photoPreview.classList.remove('effects__preview--phobos');
         photoPreview.classList.remove('effects__preview--heat');
-        // console.log(photoPreview.style.filter);
-        // console.log(`sepia(${levelEffect.value})`);
         break;
       case 'marvin':
-        //console.log('marvin');
         marvinUpdateOptions();
         slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `invert(${levelEffect.value}%)`;
@@ -206,11 +189,8 @@ effects.addEventListener('change', (evt) => {
         photoPreview.classList.remove('effects__preview--sepia');
         photoPreview.classList.remove('effects__preview--phobos');
         photoPreview.classList.remove('effects__preview--heat');
-        // console.log(photoPreview.style.filter);
-        // console.log(`invert(${levelEffect.value}%)`);
         break;
       case 'phobos':
-        //console.log('phobos');
         phobosUpdateOptions();
         slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `blur(${levelEffect.value}px)`;
@@ -219,11 +199,8 @@ effects.addEventListener('change', (evt) => {
         photoPreview.classList.remove('effects__preview--sepia');
         photoPreview.classList.remove('effects__preview--marvin');
         photoPreview.classList.remove('effects__preview--heat');
-        // console.log(photoPreview.style.filter);
-        // console.log(`blur(${levelEffect.value}px)`);
         break;
       case 'heat':
-        //console.log('heat');
         heatUpdateOptions();
         slider.classList.remove('visually-hidden');
         photoPreview.style.filter = `brightness(${levelEffect.value})`;
@@ -232,18 +209,7 @@ effects.addEventListener('change', (evt) => {
         photoPreview.classList.remove('effects__preview--sepia');
         photoPreview.classList.remove('effects__preview--marvin');
         photoPreview.classList.remove('effects__preview--phobos');
-        // console.log(photoPreview.style.filter);
-        // console.log(`brightness(${levelEffect.value})`);
         break;
     }
   }
 });
-
-// Ниже для себя писаса схему по ТЗ по домашнему заданию
-// levelEffect.value = '';
-// photoPreview.style.filter = ''; // для Оригинал - effects__preview--none
-// photoPreview.style.filter = `grayscale(${levelEffect.value})`; // для Хром - effects__preview--chrome
-// photoPreview.style.filter = `sepia(${levelEffect.value})`; // для Сепия - effects__preview--sepia
-// photoPreview.style.filter = `invert(${levelEffect.value}%)`; // для Марвин - effects__preview--marvin
-// photoPreview.style.filter = `blur(${levelEffect.value}px)`; // для Фобос - effects__preview--phobos
-// photoPreview.style.filter = `brightness(${levelEffect.value})`; // для Зной - effects__preview--heat
