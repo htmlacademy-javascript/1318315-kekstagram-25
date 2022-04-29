@@ -36,42 +36,40 @@ const toReducePhoto = (evt) => {
 
 scaleSmaller.addEventListener('click', toEnlargePhoto);
 scaleMore.addEventListener('click', toReducePhoto);
-// Удаление обработчиков при закрытии окна нужно в другом модуле - ???
-// scaleSmaller.removeEventListener('click', toEnlargePhoto);
-// scaleMore.removeEventListener('click', toReducePhoto);
 
 
 // Наложение эффекта на загружаемую фотографию
 slider.classList.add('visually-hidden');
 
-const toAddEffects = (evt) => {
-  evt.preventDefault();
-  // photoPreview.classList.add(`effects__preview--${evt.target.value}`);
-  switch (evt.target.value) {
+const toAddEffects = (effect, value) => {
+  switch (effect) {
     case 'none':
       photoPreview.style.filter = '';
       break;
     case 'chrome':
-      photoPreview.style.filter = `grayscale(${levelEffect.value})`;
+      photoPreview.style.filter = `grayscale(${value})`;
       break;
     case 'sepia':
-      photoPreview.style.filter = `sepia(${levelEffect.value})`;
+      photoPreview.style.filter = `sepia(${value})`;
       break;
     case 'marvin':
-      photoPreview.style.filter = `invert(${levelEffect.value}%)`;
+      photoPreview.style.filter = `invert(${value}%)`;
       break;
     case 'phobos':
-      photoPreview.style.filter = `blur(${levelEffect.value}px)`;
+      photoPreview.style.filter = `blur(${value}px)`;
       break;
     case 'heat':
-      photoPreview.style.filter = `brightness(${levelEffect.value})`;
+      photoPreview.style.filter = `brightness(${value})`;
       break;
   }
 };
 
-effects.addEventListener('change', toAddEffects);
-// Удаление обработчиков при закрытии окна нужно в другом модуле - ???
-// effects.removeEventListener('change', toAddEffects);
+const selectedEffect = (evt) => {
+  evt.preventDefault();
+  toAddEffects(evt.target.value, sliderControl.noUiSlider.get());
+};
+
+effects.addEventListener('change', selectedEffect); // Передаем значение ручки слайдера и эфффекта на загружаемую фотографию
 
 
 // Регулировка эффекта слайдером
@@ -164,51 +162,61 @@ const heatUpdateOptions = () => {
 };
 
 sliderControl.noUiSlider.on('update', () => {
-  levelEffect.value = sliderControl.noUiSlider.get();
-  // console.log(`полузнок с изменяемым значением 1 - ${levelEffect.value}`); // полузнок с изменяемым значением
+  const value = sliderControl.noUiSlider.get();
+  levelEffect.value = value;
 
-  //Как связать этот levelEffect.value = sliderControl.noUiSlider.get() с const toAddEffects  --- ??? ctr.47 --- ???
+  const effect = document.querySelector('input[name="effect"]:checked').value;
+
+  toAddEffects(effect, value); // Передаем значение ползунка и выбранного эффекта на загружаемую фотографию
 });
 
-effects.addEventListener('change', (evt) => {
-  if (evt.target.checked) {
+effects.addEventListener('change', (evt) => { // Записываем значение ручки слайдера в скрытое поле инпута, для передачи на сервер
+  const value = evt.target.checked;
+  if (value) {
     switch (evt.target.value) {
       case 'none':
         noneUpdateOptions();
         slider.classList.add('visually-hidden');
         photoPreview.style.filter = '';
-        // photoPreview.removeAttribute('class');
+        photoPreview.removeAttribute('class');
         break;
       case 'chrome':
         chromeUpdateOptions();
         slider.classList.remove('visually-hidden');
-        photoPreview.style.filter = `grayscale(${levelEffect.value})`;
-        // photoPreview.classList.remove('effects__preview--none', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+        photoPreview.style.filter = `grayscale(${value})`;
+        photoPreview.removeAttribute('class');
+        photoPreview.classList.add('effects__preview--chrome');
         break;
       case 'sepia':
         sepiaUpdateOptions();
         slider.classList.remove('visually-hidden');
-        photoPreview.style.filter = `sepia(${levelEffect.value})`;
-        // photoPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+        photoPreview.style.filter = `sepia(${value})`;
+        photoPreview.removeAttribute('class');
+        photoPreview.classList.add('effects__preview--sepia');
         break;
       case 'marvin':
         marvinUpdateOptions();
         slider.classList.remove('visually-hidden');
-        photoPreview.style.filter = `invert(${levelEffect.value}%)`;
-        // photoPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia',  'effects__preview--phobos', 'effects__preview--heat');
+        photoPreview.style.filter = `invert(${value}%)`;
+        photoPreview.removeAttribute('class');
+        photoPreview.classList.add('effects__preview--marvin');
         break;
       case 'phobos':
         phobosUpdateOptions();
         slider.classList.remove('visually-hidden');
-        photoPreview.style.filter = `blur(${levelEffect.value}px)`;
-        // photoPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--heat');
+        photoPreview.style.filter = `blur(${value}px)`;
+        photoPreview.removeAttribute('class');
+        photoPreview.classList.add('effects__preview--phobos');
         break;
       case 'heat':
         heatUpdateOptions();
         slider.classList.remove('visually-hidden');
-        photoPreview.style.filter = `brightness(${levelEffect.value})`;
-        // photoPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos');
+        photoPreview.style.filter = `brightness(${value})`;
+        photoPreview.removeAttribute('class');
+        photoPreview.classList.add('effects__preview--heat');
         break;
     }
   }
 });
+
+export {scaleSmaller, scaleMore, photoPreview, effects, slider, toEnlargePhoto, toReducePhoto, selectedEffect};
