@@ -1,6 +1,6 @@
 import {isEscKeydown} from './utils.js';
 import {toDeleteCloseFormEventListeners} from './remove-event-listener.js';
-import {photoPreview, slider} from './effects-photo.js';
+import {photoPreview} from './effects-photo.js';
 
 const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
@@ -17,7 +17,7 @@ const openFormUpload = () => {
   body.classList.add('modal-open');
   photoPreview.removeAttribute('class');
   photoPreview.style.filter = '';
-  slider.classList.add('visually-hidden');
+  //slider.classList.add('visually-hidden');
 };
 
 const toOpenForm = () => {

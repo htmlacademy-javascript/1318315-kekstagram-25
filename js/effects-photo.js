@@ -39,26 +39,43 @@ scaleMore.addEventListener('click', toReducePhoto);
 
 
 // Наложение эффекта на загружаемую фотографию
-slider.classList.add('visually-hidden');
 
 const toAddEffects = (effect, value) => {
   switch (effect) {
     case 'none':
       photoPreview.style.filter = '';
+      slider.setAttribute('disabled', '');
+      sliderControl.setAttribute('disabled', '');
+      levelEffect.setAttribute('disabled' ,'');
       break;
     case 'chrome':
+      slider.removeAttribute('disabled');
+      sliderControl.removeAttribute('disabled');
+      levelEffect.removeAttribute('disabled');
       photoPreview.style.filter = `grayscale(${value})`;
       break;
     case 'sepia':
+      slider.removeAttribute('disabled');
+      sliderControl.removeAttribute('disabled');
+      levelEffect.removeAttribute('disabled');
       photoPreview.style.filter = `sepia(${value})`;
       break;
     case 'marvin':
+      slider.removeAttribute('disabled');
+      sliderControl.removeAttribute('disabled');
+      levelEffect.removeAttribute('disabled');
       photoPreview.style.filter = `invert(${value}%)`;
       break;
     case 'phobos':
+      slider.removeAttribute('disabled');
+      sliderControl.removeAttribute('disabled');
+      levelEffect.removeAttribute('disabled');
       photoPreview.style.filter = `blur(${value}px)`;
       break;
     case 'heat':
+      slider.removeAttribute('disabled');
+      sliderControl.removeAttribute('disabled');
+      levelEffect.removeAttribute('disabled');
       photoPreview.style.filter = `brightness(${value})`;
       break;
   }
@@ -69,7 +86,7 @@ const selectedEffect = (evt) => {
   toAddEffects(evt.target.value, sliderControl.noUiSlider.get());
 };
 
-effects.addEventListener('change', selectedEffect); // Передаем значение ручки слайдера и эфффекта на загружаемую фотографию
+effects.addEventListener('change', selectedEffect);
 
 
 // Регулировка эффекта слайдером
@@ -167,16 +184,16 @@ sliderControl.noUiSlider.on('update', () => {
 
   const effect = document.querySelector('input[name="effect"]:checked').value;
 
-  toAddEffects(effect, value); // Передаем значение ползунка и выбранного эффекта на загружаемую фотографию
+  toAddEffects(effect, value);
 });
 
-effects.addEventListener('change', (evt) => { // Записываем значение ручки слайдера в скрытое поле инпута, для передачи на сервер
+
+effects.addEventListener('change', (evt) => {
   const value = evt.target.checked;
   if (value) {
     switch (evt.target.value) {
       case 'none':
         noneUpdateOptions();
-        slider.classList.add('visually-hidden');
         photoPreview.style.filter = '';
         photoPreview.removeAttribute('class');
         break;
