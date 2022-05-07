@@ -4,7 +4,7 @@ import {isEscKeydown} from './utils.js';
 
 const sectionPictures = drawArrayPhotos(data);
 const photos = Array.from(sectionPictures.querySelectorAll('.picture'));
-const close = fullScreenPhoto.querySelector('.big-picture__cancel');
+const closePicture = fullScreenPhoto.querySelector('.big-picture__cancel');
 
 photos.forEach((photo) => {
   photo.addEventListener('click', (evt) => {
@@ -32,8 +32,12 @@ const toEscFullScreen = (evt) => {
   }
 };
 
-close.addEventListener('click', toCloseFullScreen);
-//close.removeEventListener('click', toCloseFullScreen()); // Нужно будет перенести вдругой модуль, когда будет фильтрация и перерисовка фото.
+closePicture.addEventListener('click', toCloseFullScreen);
+//closePicture.removeEventListener('click', toCloseFullScreen); // Перенесла в модуль remove-event-listener.js
+// Нужно будет перенести вдругой модуль, когда будет фильтрация и перерисовка фото.
 
 document.addEventListener('keydown', toEscFullScreen);
-//document.removeEventListener('keydown', toEscFullScreen()); // Нужно будет перенести вдругой модуль, когда будет фильтрация и перерисовка фото.
+//document.removeEventListener('keydown', toEscFullScreen); // Перенесла в модуль remove-event-listener.js
+// Нужно будет перенести вдругой модуль, когда будет фильтрация и перерисовка фото.
+
+export {closePicture, toCloseFullScreen, toEscFullScreen};

@@ -1,10 +1,12 @@
 import {isEscKeydown} from './utils.js';
+import {toDeleteCloseFormEventListeners} from './remove-event-listener.js';
+import {toCreateEffectsPhotoEventListeners, toResetEffects} from './effects-photo.js';
 
 const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
 const openFile = form.querySelector('#upload-file');
 const imageUpload = form.querySelector('.img-upload__overlay');
-const close = form.querySelector('#upload-cancel');
+const closeForm = form.querySelector('#upload-cancel');
 const hashtagsField = form.querySelector('.text__hashtags');
 const commentsField = form.querySelector('.text__description');
 const hashtagError = 'Должно быть минимум два символа. Максимальная длина одного #ХэшТега - 20 символов, можно написать самое большее пять #ХэшТегов. Используйте кириллицу, латиницу и цифры.';
@@ -18,6 +20,8 @@ const openFormUpload = () => {
 const toOpenForm = () => {
   openFormUpload();
   toCreateEventListeners();
+  toCreateEffectsPhotoEventListeners();
+  toResetEffects();
 };
 
 openFile.addEventListener('change', toOpenForm);
@@ -33,7 +37,7 @@ const closeFormUpload = () => {
 
 const toCloseForm = () => {
   closeFormUpload();
-  toDeleteEventListeners();
+  toDeleteCloseFormEventListeners();
 };
 
 const toEscCloseForm = (evt) => {
@@ -48,13 +52,8 @@ const toEscCloseForm = (evt) => {
 };
 
 function toCreateEventListeners () {
-  close.addEventListener('click', toCloseForm);
+  closeForm.addEventListener('click', toCloseForm);
   document.addEventListener('keydown', toEscCloseForm);
-}
-
-function toDeleteEventListeners () {
-  close.removeEventListener('click', toCloseForm);
-  document.removeEventListener('keydown', toEscCloseForm);
 }
 
 // Валидация
@@ -76,11 +75,7 @@ window.onload = function () {
       } else {
         for (let i = 0; i < hashtagArray.length; i++) {
           const currentHashtag = hashtagArray[i];
-          if (hashtagSymbol.exec(currentHashtag)) {
-            return true;
-          }
-          return false;
-          //return hashtagSymbol.exec(currentHashtag); // В такой форме записи функция возвращает не тот результат, который нужен
+          return new Boolean(hashtagSymbol.exec(currentHashtag));
         }
       }
     };
@@ -99,3 +94,5 @@ window.onload = function () {
     return isValid ? form.submit() : evt.preventDefault();
   });
 };
+
+export {closeForm, toCloseForm, toEscCloseForm};
