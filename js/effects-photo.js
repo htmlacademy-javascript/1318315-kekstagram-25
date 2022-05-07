@@ -5,13 +5,12 @@ const STEP_SCALE = 0.25;
 const scaleSmaller = document.querySelector('.scale__control--smaller');
 const scaleMore = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
-const boxPhotoPreview = document.querySelector('.img-upload__preview'); // обертка фото
-const photoPreview = document.querySelector('.img-upload__preview img'); // собственно фото // должно меняться значение и тогда будет визуальный эффект на фото
-const effects = document.querySelector('.effects__list'); // список эффектов
-const slider = document.querySelector('.img-upload__effect-level'); // обертка слайдера ? или ? фото+эффект ? или ? наложение эффекта на фото
-const sliderControl = document.querySelector('.effect-level__slider'); // собственно слайдер, div, ручка, шкала
-const levelEffect = document.querySelector('.effect-level__value'); // скрытое поле инпута
-
+const boxPhotoPreview = document.querySelector('.img-upload__preview');
+const photoPreview = document.querySelector('.img-upload__preview img');
+const effects = document.querySelector('.effects__list');
+const slider = document.querySelector('.img-upload__effect-level');
+const sliderControl = document.querySelector('.effect-level__slider');
+const levelEffect = document.querySelector('.effect-level__value');
 
 // Изменение масштаба загружаемой фотографии
 let valueScaleControl = 100;
@@ -34,12 +33,7 @@ const toReducePhoto = (evt) => {
   }
 };
 
-scaleSmaller.addEventListener('click', toEnlargePhoto);
-scaleMore.addEventListener('click', toReducePhoto);
-
-
 // Регулировка эффекта слайдером
-
 noUiSlider.create(sliderControl, {
   range: {
     min: 0,
@@ -127,42 +121,29 @@ const heatUpdateOptions = () => {
   });
 };
 
-const toUpdateControl = (effect, value) => {
+const toUpdateControl = (effect) => {
   switch (effect) {
     case 'none':
       noneUpdateOptions();
-      photoPreview.style.filter = '';
-      // console.log('none UpdateControl');
       break;
     case 'chrome':
       chromeUpdateOptions();
-      photoPreview.style.filter = `grayscale(${value})`;
-      // console.log('chrome UpdateControl');
       break;
     case 'sepia':
       sepiaUpdateOptions();
-      photoPreview.style.filter = `sepia(${value})`;
-      // console.log('sepia UpdateControl');
       break;
     case 'marvin':
       marvinUpdateOptions();
-      photoPreview.style.filter = `invert(${value}%)`;
-      // console.log('marvin UpdateControl');
       break;
     case 'phobos':
       phobosUpdateOptions();
-      photoPreview.style.filter = `blur(${value}px)`;
-      // console.log('phobos UpdateControl');
       break;
     case 'heat':
       heatUpdateOptions();
-      photoPreview.style.filter = `brightness(${value})`;
-      // console.log('heat UpdateControl');
       break;
   }
 };
 
-// Наложение эффекта на загружаемую фотографию
 const removeDisabled = () => {
   slider.removeAttribute('disabled');
   sliderControl.removeAttribute('disabled');
@@ -175,56 +156,38 @@ const toAddEffects = (effect, value) => {
       slider.setAttribute('disabled', '');
       sliderControl.setAttribute('disabled', '');
       levelEffect.setAttribute('disabled' ,'');
-      // noneUpdateOptions();
-      // toUpdateControl(effect, value);
-      photoPreview.style.filter = '';
       photoPreview.removeAttribute('class');
-      // console.log('none', photoPreview);
+      photoPreview.style.filter = '';
       break;
     case 'chrome':
       removeDisabled();
       photoPreview.style.filter = `grayscale(${value})`;
-      // chromeUpdateOptions();
-      // toUpdateControl(effect, value);
       photoPreview.removeAttribute('class');
       photoPreview.classList.add('effects__preview--chrome');
-      // console.log('chrome', photoPreview);
       break;
     case 'sepia':
       removeDisabled();
       photoPreview.style.filter = `sepia(${value})`;
-      // sepiaUpdateOptions();
-      // toUpdateControl(effect, value);
       photoPreview.removeAttribute('class');
       photoPreview.classList.add('effects__preview--sepia');
-      // console.log('sepia', photoPreview);
       break;
     case 'marvin':
       removeDisabled();
       photoPreview.style.filter = `invert(${value}%)`;
-      // marvinUpdateOptions();
-      // toUpdateControl(effect, value);
       photoPreview.removeAttribute('class');
       photoPreview.classList.add('effects__preview--marvin');
-      // console.log('marvin', photoPreview);
       break;
     case 'phobos':
       removeDisabled();
       photoPreview.style.filter = `blur(${value}px)`;
-      // phobosUpdateOptions();
-      // toUpdateControl(effect, value);
       photoPreview.removeAttribute('class');
       photoPreview.classList.add('effects__preview--phobos');
-      // console.log('phobos', photoPreview);
       break;
     case 'heat':
       removeDisabled();
       photoPreview.style.filter = `brightness(${value})`;
-      // heatUpdateOptions();
-      // toUpdateControl(effect, value);
       photoPreview.removeAttribute('class');
       photoPreview.classList.add('effects__preview--heat');
-      // console.log('heat', photoPreview);
       break;
   }
 };
@@ -232,20 +195,29 @@ const toAddEffects = (effect, value) => {
 const selectedEffect = (evt) => {
   evt.preventDefault();
   toAddEffects(evt.target.value, sliderControl.noUiSlider.get());
-  toUpdateControl(evt.target.value, sliderControl.noUiSlider.get());
+  toUpdateControl(evt.target.value);
 };
-
-effects.addEventListener('change', selectedEffect);
-
 
 sliderControl.noUiSlider.on('update', () => {
   const value = sliderControl.noUiSlider.get();
   levelEffect.value = value;
-  // console.log(`noUiSlider levelEffect(${levelEffect.value})`);
   const effect = document.querySelector('input[name="effect"]:checked').value;
-  // console.log(`noUiSlider effect(${effect})`);
   toAddEffects(effect, value);
 });
 
+const toCreateEffectsPhotoEventListeners = () => {
+  scaleSmaller.addEventListener('click', toEnlargePhoto);
+  scaleMore.addEventListener('click', toReducePhoto);
+  effects.addEventListener('change', selectedEffect);
+};
 
-export {scaleSmaller, scaleMore, photoPreview, effects, slider, toEnlargePhoto, toReducePhoto, selectedEffect};
+const toResetEffects = () => {
+  slider.setAttribute('disabled', '');
+  sliderControl.setAttribute('disabled', '');
+  levelEffect.setAttribute('disabled' ,'');
+  photoPreview.removeAttribute('class');
+  photoPreview.style.filter = '';
+  noneUpdateOptions();
+};
+
+export {scaleSmaller, scaleMore, effects, slider, toEnlargePhoto, toReducePhoto, selectedEffect, toCreateEffectsPhotoEventListeners, toResetEffects};

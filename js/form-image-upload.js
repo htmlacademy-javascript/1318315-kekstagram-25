@@ -1,6 +1,6 @@
 import {isEscKeydown} from './utils.js';
 import {toDeleteCloseFormEventListeners} from './remove-event-listener.js';
-import {photoPreview} from './effects-photo.js';
+import {toCreateEffectsPhotoEventListeners, toResetEffects} from './effects-photo.js';
 
 const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
@@ -15,14 +15,13 @@ const hashtagError = 'Должно быть минимум два символа
 const openFormUpload = () => {
   imageUpload.classList.remove('hidden');
   body.classList.add('modal-open');
-  photoPreview.removeAttribute('class');
-  photoPreview.style.filter = '';
-  //slider.classList.add('visually-hidden');
 };
 
 const toOpenForm = () => {
   openFormUpload();
   toCreateEventListeners();
+  toCreateEffectsPhotoEventListeners();
+  toResetEffects();
 };
 
 openFile.addEventListener('change', toOpenForm);
@@ -56,11 +55,6 @@ function toCreateEventListeners () {
   closeForm.addEventListener('click', toCloseForm);
   document.addEventListener('keydown', toEscCloseForm);
 }
-
-// function toDeleteEventListeners () {
-//   closeForm.removeEventListener('click', toCloseForm);
-//   document.removeEventListener('keydown', toEscCloseForm);
-// } // Перенесла в модуль remove-event-listener.js
 
 // Валидация
 const hashtagSymbol = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/im;
